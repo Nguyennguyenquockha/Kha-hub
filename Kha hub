@@ -1,0 +1,164 @@
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Tạo GUI cho hub
+local hubGui = Instance.new("ScreenGui", playerGui)
+hubGui.Name = "KhaHub"
+
+-- Khung chính của hub
+local mainFrame = Instance.new("Frame", hubGui)
+mainFrame.Size = UDim2.new(0, 350, 0, 500)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -250)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BorderColor3 = Color3.fromRGB(255, 140, 0)
+mainFrame.Visible = false
+mainFrame.Rotation = 15
+
+-- Tên hub
+local titleLabel = Instance.new("TextLabel", mainFrame)
+titleLabel.Text = "Kha Hub"
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Nút mở hub
+local openButton = Instance.new("TextButton", hubGui)
+openButton.Text = "Open Kha Hub"
+openButton.Position = UDim2.new(0.5, -75, 0, 10)
+openButton.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+openButton.MouseButton1Click:Connect(function() mainFrame.Visible = true end)
+
+-- Nút đóng hub
+local closeButton = Instance.new("TextButton", mainFrame)
+closeButton.Text = "X"
+closeButton.Position = UDim2.new(1, -40, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.MouseButton1Click:Connect(function() mainFrame.Visible = false end)
+
+-- Kéo bảng hub
+local dragging, dragInput, startPos
+titleLabel.MouseButton1Down:Connect(function(input)
+    dragging = true
+    dragInput = input
+    startPos = mainFrame.Position
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragInput.Position
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- ESP Toggle Button
+local espEnabled = false
+local espButton = Instance.new("TextButton", mainFrame)
+espButton.Text = "Toggle ESP"
+espButton.Size = UDim2.new(0, 180, 0, 50)
+espButton.Position = UDim2.new(0, 10, 0, 70)
+espButton.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+
+espButton.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+        if targetPlayer ~= player and targetPlayer.Character then
+            if espEnabled then
+                -- Thêm ESP
+                local billboard = Instance.new("BillboardGui", targetPlayer.Character.Head)
+                billboard.Size = UDim2.new(1, 0, 1, 0)
+                billboard.AlwaysOnTop = true
+
+                local nameLabel = Instance.new("TextLabel", billboard)
+                nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                nameLabel.Text = targetPlayer.Name
+                nameLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+                nameLabel.BackgroundTransparency = 1
+                nameLabel.Font = Enum.Font.SourceSansBold
+                nameLabel.TextScaled = true
+            else
+                -- Xóa ESP
+                for _, gui in pairs(targetPlayer.Character.Head:GetChildren()) do
+                    if gui:IsA("BillboardGui") then
+                        gui:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- Speed Slider
+local speedLabel = Instance.new("TextLabel", mainFrame)
+speedLabel.Text = "Speed: 16"
+speedLabel.Size = UDim2.new(0, 180, 0, 50)
+speedLabel.Position = UDim2.new(0, 10, 0, 130)
+speedLabel.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+speedLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+local speedSlider = Instance.new("TextBox", mainFrame)
+speedSlider.Size = UDim2.new(0, 180, 0, 50)
+speedSlider.Position = UDim2.new(0, 10, 0, 190)
+speedSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+speedSlider.Text = "16"
+
+local speedValue = 16
+speedSlider.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local newSpeed = tonumber(speedSlider.Text)
+        if newSpeed then
+            speedValue = math.clamp(newSpeed, 16, 100)
+            speedLabel.Text = "Speed: " .. speedValue
+            player.Character.Humanoid.WalkSpeed = speedValue
+        end
+    end
+end)
+
+-- Infinite Jump
+local jumpEnabled = false
+local jumpButton = Instance.new("TextButton", mainFrame)
+jumpButton.Text = "Toggle Infinite Jump"
+jumpButton.Size = UDim2.new(0, 180, 0, 50)
+jumpButton.Position = UDim2.new(0, 10, 0, 250)
+jumpButton.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+
+jumpButton.MouseButton1Click:Connect(function()
+    jumpEnabled = not jumpEnabled
+    player.Character.Humanoid.JumpPower = jumpEnabled and 100 or 50 -- Thiết lập Jump Power
+end)
+
+-- Fly
+local flyEnabled = false
+local flyButton = Instance.new("TextButton", mainFrame)
+flyButton.Text = "Toggle Fly"
+flyButton.Size = UDim2.new(0, 180, 0, 50)
+flyButton.Position = UDim2.new(0, 10, 0, 310)
+flyButton.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+
+flyButton.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        player.Character.Humanoid.PlatformStand = true
+        local flyDirection = Vector3.new(0, 0, 0)
+        local userInputService = game:GetService("UserInputService")
+        
+        userInputService.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.Keyboard then
+                if input.KeyCode == Enum.KeyCode.W then flyDirection = Vector3.new(0, 0, 1) end
+                if input.KeyCode == Enum.KeyCode.S then flyDirection = Vector3.new(0, 0, -1) end
+                if input.KeyCode == Enum.KeyCode.A then flyDirection = Vector3.new(-1, 0, 0) end
+                if input.KeyCode == Enum.KeyCode.D then flyDirection = Vector3.new(1, 0, 0) end
+            end
+        end)
+
+        while flyEnabled do
+            player.Character:Move(flyDirection * (speedValue / 16), true)
+            wait(0.1)
+        end
+    else
+        player.Character.Humanoid.PlatformStand = false
+    end
+end)
