@@ -1,0 +1,65 @@
+-- Tạo bảng hub tên Kha Hub
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({
+    Name = "Kha Hub",
+    HidePremium = false,
+    IntroText = "Welcome to Kha Hub",
+    SaveConfig = true,
+    ConfigFolder = "KhaHub"
+})
+
+-- Tạo một tab trống cho các tính năng sau này
+local MainTab = Window:MakeTab({
+    Name = "Main",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+-- Khởi tạo hub nhưng không thêm tính năng gì vào
+OrionLib:Init()
+
+-- Auto Roll Pets cho Pets Go!
+MainTab:AddToggle({
+    Name = "Auto Roll Pets",
+    Default = false,
+    Callback = function(state)
+        _G.AutoRollPets = state
+        while _G.AutoRollPets do
+            game:GetService("ReplicatedStorage").RollPetEvent:FireServer()
+            wait(3) -- Thời gian giữa mỗi lần roll pet
+        end
+    end
+})
+
+-- Auto Upgrade cho Pets Go!
+MainTab:AddToggle({
+    Name = "Auto Upgrade",
+    Default = false,
+    Callback = function(state)
+        _G.AutoUpgrade = state
+        while _G.AutoUpgrade do
+            for _, upgrade in pairs(game:GetService("ReplicatedStorage").Upgrades:GetChildren()) do
+                game:GetService("ReplicatedStorage").UpgradeEvent:FireServer(upgrade.Name)
+            end
+            wait(5) -- Khoảng thời gian giữa mỗi lần nâng cấp
+        end
+    end
+})
+
+-- Auto Farm Coin cho Pets Go!
+MainTab:AddToggle({
+    Name = "Auto Farm Coin",
+    Default = false,
+    Callback = function(state)
+        _G.AutoFarmCoin = state
+        while _G.AutoFarmCoin do
+            for _, coin in pairs(game.Workspace.Coins:GetChildren()) do
+                if coin:IsA("Part") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = coin.CFrame
+                    wait(0.5) -- Thời gian giữa mỗi lần thu thập
+                end
+            end
+            wait(1)
+        end
+    end
+})
