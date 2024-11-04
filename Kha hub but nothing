@@ -1,0 +1,154 @@
+-- Kha Hub
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source.lua"))()
+
+local Window = OrionLib:MakeWindow({Name = "Kha Hub", HidePremium = true})
+
+-- Tab 1: ESP
+local EspTab = Window:MakeTab({
+    Name = "ESP",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+EspTab:AddToggle({
+    Name = "ESP Người Chơi",
+    Default = false,
+    Callback = function(Value)
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character then
+                local highlight = Instance.new("Highlight")
+                highlight.FillColor = Color3.new(1, 1, 1) -- Màu trắng
+                highlight.OutlineColor = Color3.new(1, 1, 1)
+                highlight.Parent = player.Character
+                
+                -- Xóa highlight khi tắt ESP
+                if not Value then
+                    highlight:Destroy()
+                end
+            end
+        end
+    end
+})
+
+-- Tab 2: Speed & Jump
+local SpeedJumpTab = Window:MakeTab({
+    Name = "Speed & Jump",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+SpeedJumpTab:AddSlider({
+    Name = "Tốc Độ",
+    Min = 1,
+    Max = 100,
+    Default = 16,
+    Increment = 1,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end
+})
+
+SpeedJumpTab:AddToggle({
+    Name = "Infinite Jump",
+    Default = false,
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        if Value then
+            player.Character:WaitForChild("Humanoid").Changed:Connect(function()
+                if player.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                    player.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end)
+        end
+    end
+})
+
+-- Tab 3: Fly
+local FlyTab = Window:MakeTab({
+    Name = "Fly",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local flying = false
+local flySpeed = 10
+
+FlyTab:AddToggle({
+    Name = "Fly",
+    Default = false,
+    Callback = function(Value)
+        flying = Value
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        local humanoid = character:WaitForChild("Humanoid")
+
+        if flying then
+            local bodyVelocity = Instance.new("BodyVelocity")
+            bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+            bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")
+
+            game:GetService("RunService").Heartbeat:Connect(function()
+                if flying then
+                    local direction = Vector3.new(0, 0, 0)
+                    if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
+                        direction = direction + workspace.CurrentCamera.CFrame.LookVector
+                    end
+                    if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.S) then
+                        direction = direction - workspace.CurrentCamera.CFrame.LookVector
+                    end
+                    if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.A) then
+                        direction = direction - workspace.CurrentCamera.CFrame.RightVector
+                    end
+                    if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.D) then
+                        direction = direction + workspace.CurrentCamera.CFrame.RightVector
+                    end
+                    bodyVelocity.Velocity = direction * flySpeed + Vector3.new(0, 50, 0)
+                else
+                    bodyVelocity:Destroy()
+                end
+            end)
+        end
+    end
+})
+
+FlyTab:AddSlider({
+    Name = "Tốc Độ Bay",
+    Min = 1,
+    Max = 25,
+    Default = 10,
+    Increment = 1,
+    Callback = function(Value)
+        flySpeed = Value
+    end
+})
+
+-- Tab 4: Fling
+local FlingTab = Window:MakeTab({
+    Name = "Fling",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+FlingTab:AddTextbox({
+    Name = "Tên Người Chơi",
+    Default = "Nhập tên người chơi",
+    TextDisappear = true,
+    Callback = function(PlayerName)
+        local playerToFling = game.Players:FindFirstChild(PlayerName)
+        if playerToFling and playerToFling.Character then
+            local fling = Instance.new("BodyVelocity")
+            fling.Velocity = Vector3.new(0, 100, 0) -- Tốc độ fling
+            fling.MaxForce = Vector3.new(4000, 4000, 4000)
+            fling.Parent = playerToFling.Character:WaitForChild("HumanoidRootPart")
+
+            -- Xóa fling sau 1 giây
+            wait(1)
+            fling:Destroy()
+        else
+            print("Không tìm thấy người chơi hoặc nhân vật không có mặt!")
+        end
+    end
+})
+
+-- Khởi tạo bảng
+OrionLib:Init()
