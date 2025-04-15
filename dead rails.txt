@@ -1,0 +1,311 @@
+-- SERVICES
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-- GUI SETUP
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+screenGui.Name = "UniversalKingHubUI"
+screenGui.ResetOnSpawn = false
+
+-- MAIN FRAME
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 400, 0, 320)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 12)
+
+-- TITLE BAR
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 40)
+titleBar.BackgroundColor3 = Color3.fromRGB(38, 38, 50)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = mainFrame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -50, 1, 0)
+title.Position = UDim2.new(0, 15, 0, 0)
+title.Text = "Universal King Hub by kxrtz And Dusk"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.BackgroundTransparency = 1
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = titleBar
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 32, 0, 32)
+closeButton.Position = UDim2.new(1, -40, 0.5, -16)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 16
+closeButton.TextColor3 = Color3.new(1,1,1)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+closeButton.Parent = titleBar
+Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0, 8)
+
+closeButton.MouseButton1Click:Connect(function()
+	screenGui:Destroy()
+end)
+
+-- DRAG FUNCTIONALITY
+local dragging = false
+local dragStart, startPos
+local function update(input)
+	local delta = input.Position - dragStart
+	mainFrame.Position = UDim2.new(
+		startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y
+	)
+end
+
+titleBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = mainFrame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		update(input)
+	end
+end)
+
+-- TABS FRAME
+local tabsFrame = Instance.new("Frame")
+tabsFrame.Size = UDim2.new(1, 0, 0, 35)
+tabsFrame.Position = UDim2.new(0, 0, 0, 40)
+tabsFrame.BackgroundColor3 = Color3.fromRGB(33, 33, 45)
+tabsFrame.BorderSizePixel = 0
+tabsFrame.Parent = mainFrame
+
+local sections = {}
+
+local function createTab(name, order)
+	local tabButton = Instance.new("TextButton")
+	tabButton.Size = UDim2.new(0, 110, 1, 0)
+	tabButton.Position = UDim2.new(0, order * 115, 0, 0)
+	tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
+	tabButton.Text = name
+	tabButton.Font = Enum.Font.Gotham
+	tabButton.TextSize = 14
+	tabButton.TextColor3 = Color3.new(1, 1, 1)
+	tabButton.AutoButtonColor = false
+	tabButton.Parent = tabsFrame
+	Instance.new("UICorner", tabButton).CornerRadius = UDim.new(0, 6)
+
+	tabButton.MouseEnter:Connect(function()
+		tabButton.BackgroundColor3 = Color3.fromRGB(70, 70, 100)
+	end)
+	tabButton.MouseLeave:Connect(function()
+		tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
+	end)
+
+	return tabButton
+end
+
+local function createSection(name)
+	local section = Instance.new("Frame")
+	section.Name = name
+	section.Size = UDim2.new(1, -20, 1, -85)
+	section.Position = UDim2.new(0, 10, 0, 80)
+	section.BackgroundTransparency = 1
+	section.Visible = false
+	section.Parent = mainFrame
+	sections[name] = section
+	return section
+end
+
+local function showSection(name)
+	for secName, secFrame in pairs(sections) do
+		secFrame.Visible = (secName == name)
+	end
+end
+
+local function createButton(parent, text, position, callback)
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(0, 180, 0, 40)
+	button.Position = position
+	button.Text = text
+	button.Font = Enum.Font.Gotham
+	button.TextSize = 14
+	button.BackgroundColor3 = Color3.fromRGB(80, 80, 110)
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Parent = parent
+	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 6)
+
+	button.MouseEnter:Connect(function()
+		button.BackgroundColor3 = Color3.fromRGB(100, 100, 140)
+	end)
+	button.MouseLeave:Connect(function()
+		button.BackgroundColor3 = Color3.fromRGB(80, 80, 110)
+	end)
+
+	button.MouseButton1Click:Connect(callback)
+	return button
+end
+
+-- DEAD RAILS
+local deadRailsSection = createSection("DeadRails")
+createButton(deadRailsSection, "Fast Castle TP", UDim2.new(0, 0, 0, 0), function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+end)
+createButton(deadRailsSection, "TP To End 100% no fail", UDim2.new(0, 0, 0, 50), function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/TwoGunVolley/Earlyfixed/refs/heads/main/Protected_1408189441085576.txt"))()
+end)
+createButton(deadRailsSection, "TP To Fort", UDim2.new(0, 0, 0, 100), function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+end)
+local nullfireLoaded = false
+createButton(deadRailsSection, "Nullfire OP Features", UDim2.new(0, 0, 0, 150), function()
+	if not nullfireLoaded then
+		nullfireLoaded = true
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+		StarterGui:SetCore("SendNotification", { Title = "Nullfire OP Features", Text = "Loaded!", Duration = 3 })
+	else
+		StarterGui:SetCore("SendNotification", { Title = "Nullfire OP Features", Text = "Already loaded.", Duration = 2 })
+	end
+end)
+local npcLock = false
+local toggleLoop
+createButton(deadRailsSection, "NPC Lock", UDim2.new(0, 0, 0, 200), function()
+	npcLock = not npcLock
+	if npcLock then
+		StarterGui:SetCore("SendNotification", { Title = "NPC Lock", Text = "Activated", Duration = 2 })
+		toggleLoop = RunService.RenderStepped:Connect(function()
+			local closest, dist = nil, math.huge
+			for _, model in ipairs(workspace:GetDescendants()) do
+				if model:IsA("Model") and not Players:GetPlayerFromCharacter(model) then
+					local hum = model:FindFirstChildOfClass("Humanoid")
+					local root = model:FindFirstChild("HumanoidRootPart")
+					if hum and root and hum.Health > 0 then
+						local d = (root.Position - player.Character.HumanoidRootPart.Position).Magnitude
+						if d < dist then
+							closest = hum
+							dist = d
+						end
+					end
+				end
+			end
+			if closest then
+				camera.CameraSubject = closest
+			end
+		end)
+	else
+		if toggleLoop then toggleLoop:Disconnect() end
+		camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
+		StarterGui:SetCore("SendNotification", { Title = "NPC Lock", Text = "Deactivated", Duration = 2 })
+	end
+end)
+
+-- NEW BUTTON: TP TO TESLA LAB
+local teslaBtn = createButton(deadRailsSection, "TP TO TESLA LAB", UDim2.new(0, 0, 0, 250), function()
+	-- Animation
+	local grow = TweenService:Create(teslaBtn, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+		Size = UDim2.new(0, 190, 0, 45)
+	})
+	local shrink = TweenService:Create(teslaBtn, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+		Size = UDim2.new(0, 180, 0, 40)
+	})
+	grow:Play()
+	grow.Completed:Connect(function()
+		shrink:Play()
+	end)
+
+	-- Message
+	local msg = Instance.new("TextLabel")
+	msg.Size = UDim2.new(0, 250, 0, 35)
+	msg.Position = UDim2.new(0.5, -125, 0, -45)
+	msg.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+	msg.TextColor3 = Color3.new(1, 1, 1)
+	msg.Font = Enum.Font.GothamBold
+	msg.TextSize = 14
+	msg.Text = "Teleporting to Tesla Lab..."
+	msg.BackgroundTransparency = 0.2
+	msg.ZIndex = 5
+	msg.Parent = screenGui
+	Instance.new("UICorner", msg).CornerRadius = UDim.new(0, 8)
+	task.delay(2.5, function()
+		for i = 1, 10 do
+			msg.TextTransparency = i * 0.1
+			msg.BackgroundTransparency = 0.2 + i * 0.08
+			task.wait(0.05)
+		end
+		msg:Destroy()
+	end)
+
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua'))()
+end)
+
+-- BROOKHAVEN
+local brookhavenSection = createSection("Brookhaven")
+createButton(brookhavenSection, "Darkones Empire", UDim2.new(0, 0, 0, 0), function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/TheDarkoneMarcillisePex/Other-Scripts/main/Brook%20Haven%20Gui'))()
+end)
+createButton(brookhavenSection, "Zenxos Hub", UDim2.new(0, 0, 0, 50), function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/gclich/GHUBV15_X_ZENXOS-MAINLOADER/refs/heads/main/GHUB-X-ZENXOS-V15.txt"))()
+end)
+
+-- BLADE BALL
+local bladeBallSection = createSection("BladeBall")
+createButton(bladeBallSection, "Darkone Ball Parry", UDim2.new(0, 0, 0, 0), function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/TheDarkoneMarcillisePex/Other-Scripts/refs/heads/main/BladeBall%20GUI'))()
+end)
+
+-- UNIVERSAL GAMES
+local universalSection = createSection("UniversalGames")
+createButton(universalSection, "Infinite Yield Admin Commands", UDim2.new(0, 0, 0, 0), function()
+	loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'), true))()
+end)
+createButton(universalSection, "FE Jerk Off (13+)", UDim2.new(0, 0, 0, 50), function()
+	loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
+end)
+createButton(universalSection, "Ghost Hub 🌐", UDim2.new(0, 0, 0, 100), function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Ghost-hub-universal-27291"))()
+end)
+createButton(universalSection, "Shaders Ultimate QUALITY", UDim2.new(0, 0, 0, 150), function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Pshade-Ultimate-26321"))()
+end)
+createButton(universalSection, "FPS BOOSTER", UDim2.new(0, 0, 0, 200), function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua'))()
+end)
+
+-- CREATE TABS
+createTab("Dead Rails", 0).MouseButton1Click:Connect(function() showSection("DeadRails") end)
+createTab("Brookhaven", 1).MouseButton1Click:Connect(function() showSection("Brookhaven") end)
+createTab("Blade Ball", 2).MouseButton1Click:Connect(function() showSection("BladeBall") end)
+createTab("Universal Games", 3).MouseButton1Click:Connect(function() showSection("UniversalGames") end)
+
+-- DEFAULT SECTION
+showSection("DeadRails")
+
+-- TOGGLE BUTTON
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(1, -60, 0, 100)
+toggleButton.Text = ">"
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 24
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+toggleButton.Parent = screenGui
+Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 12)
+
+toggleButton.MouseButton1Click:Connect(function()
+	mainFrame.Visible = not mainFrame.Visible
+	toggleButton.Text = mainFrame.Visible and "<" or ">"
+end)
