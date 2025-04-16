@@ -1,0 +1,148 @@
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+ScreenGui.ResetOnSpawn = false
+
+-- Giao diện chính
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 250, 0, 340)
+MainFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(120, 180, 255)
+MainFrame.Parent = ScreenGui
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+Instance.new("UIStroke", MainFrame).Color = Color3.fromRGB(0, 85, 170)
+
+-- Cho phép kéo
+local dragging, dragInput, dragStart, startPos
+local function makeDraggable(frame)
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then dragging = false end
+			end)
+		end
+	end)
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+			dragInput = input
+		end
+	end)
+	UIS.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+end
+makeDraggable(MainFrame)
+
+-- Tựa đề
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = "Kha Menu V1"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 22
+Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Layout
+local Layout = Instance.new("UIListLayout", MainFrame)
+Layout.SortOrder = Enum.SortOrder.LayoutOrder
+Layout.Padding = UDim.new(0, 6)
+Title.LayoutOrder = 0
+
+-- Tạo nút
+local function createButton(text, callback)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -20, 0, 40)
+	btn.BackgroundColor3 = Color3.fromRGB(170, 220, 255)
+	btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+	btn.Font = Enum.Font.SourceSansBold
+	btn.TextSize = 18
+	btn.Text = text
+	Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+	btn.MouseButton1Click:Connect(callback)
+	btn.Parent = MainFrame
+	return btn
+end
+
+-- Các tính năng
+createButton("TP đến Tesla Lab", function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua'))()
+end)
+
+createButton("TP đến lâu đài tình ái", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+end)
+
+createButton("TP đến tháp pháo", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+end)
+
+createButton("Nullfire", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+end)
+
+-- NoClip nâng cấp
+local noclipEnabled = false
+local noclipConnection
+
+local function applyNoClip(char)
+	for _, part in ipairs(char:GetDescendants()) do
+		if part:IsA("BasePart") and not part.Anchored then
+			part.CanCollide = false
+		end
+	end
+end
+
+local function stopNoClip(char)
+	for _, part in ipairs(char:GetDescendants()) do
+		if part:IsA("BasePart") then
+			part.CanCollide = true
+		end
+	end
+end
+
+local function toggleNoClip(state)
+	noclipEnabled = state
+	noclipButton.Text = "NoClip: " .. (state and "ON" or "OFF")
+
+	if state then
+		if not noclipConnection then
+			noclipConnection = RunService.Stepped:Connect(function()
+				local char = LocalPlayer.Character
+				if char then
+					applyNoClip(char)
+				end
+			end)
+		end
+	else
+		if noclipConnection then
+			noclipConnection:Disconnect()
+			noclipConnection = nil
+		end
+		local char = LocalPlayer.Character
+		if char then
+			stopNoClip(char)
+		end
+	end
+end
+
+-- Nút NoClip
+noclipButton = createButton("NoClip: OFF", function()
+	toggleNoClip(not noclipEnabled)
+end)
+
+-- Tự khôi phục khi reset
+LocalPlayer.CharacterAdded:Connect(function(char)
+	wait(1)
+	if noclipEnabled then
+		applyNoClip(char)
+	end
+end)
