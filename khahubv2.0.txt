@@ -1,0 +1,120 @@
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+gui.ResetOnSpawn = false
+
+local function draggable(frame)
+	local drag, start, pos
+	frame.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 then
+			drag, start, pos = true, i.Position, frame.Position
+			i.Changed:Connect(function() if i.UserInputState == Enum.UserInputState.End then drag = false end end)
+		end
+	end)
+	UIS.InputChanged:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseMovement and drag then
+			local delta = i.Position - start
+			frame.Position = UDim2.new(pos.X.Scale, pos.X.Offset + delta.X, pos.Y.Scale, pos.Y.Offset + delta.Y)
+		end
+	end)
+end
+
+local function newButton(txt, func)
+	local b = Instance.new("TextButton")
+	b.Size = UDim2.new(0.45, 0, 0, 40)
+	b.BackgroundColor3 = Color3.fromRGB(170, 220, 255)
+	b.Font = Enum.Font.SourceSansBold
+	b.TextSize = 18
+	b.TextColor3 = Color3.new(0, 0, 0)
+	b.Text = txt
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+	b.MouseButton1Click:Connect(function() task.spawn(function() func(b) end) end)
+	return b
+end
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 420, 0, 380)
+frame.Position = UDim2.new(0.05, 0, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(120, 180, 255)
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+Instance.new("UIStroke", frame).Color = Color3.fromRGB(0, 85, 170)
+draggable(frame)
+
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, -40, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Kha Menu V2.0"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 22
+title.TextColor3 = Color3.new(0, 0, 0)
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+local close = Instance.new("TextButton", frame)
+close.Size = UDim2.new(0, 30, 0, 30)
+close.Position = UDim2.new(1, -35, 0, 5)
+close.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+close.Text = "X"
+close.Font = Enum.Font.GothamBold
+close.TextSize = 20
+close.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", close).CornerRadius = UDim.new(0, 4)
+close.MouseButton1Click:Connect(function() frame.Visible = false end)
+
+local holder = Instance.new("Frame", frame)
+holder.Position = UDim2.new(0, 10, 0, 50)
+holder.Size = UDim2.new(1, -20, 1, -60)
+holder.BackgroundTransparency = 1
+
+local layout = Instance.new("UIGridLayout", holder)
+layout.CellSize = UDim2.new(0.45, 0, 0, 40)
+layout.CellPadding = UDim2.new(0, 10, 0, 10)
+layout.FillDirectionMaxCells = 2
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+local function add(name, url)
+	newButton(name, function(btn)
+		btn.Text = "Đang tải..."
+		pcall(function() loadstring(game:HttpGet(url))() end)
+		btn.Text = name
+	end).Parent = holder
+end
+
+add("TP Tesla", "https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua")
+add("TP Lâu Đài", "https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua")
+add("TP Tháp Pháo", "https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua")
+add("Nullfire", "https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader")
+add("TP Hầm mỏ", "https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua")
+add("TP Cuối", "https://raw.githubusercontent.com/TwoGunVolley/Earlyfixed/refs/heads/main/Protected_1408189441085576.txt")
+add("Tăng FPS", "https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua")
+
+newButton("TP về tàu (ngồi lái)", function()
+	local char = LocalPlayer.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+	local seat = workspace:FindFirstChild("Train") and workspace.Train:FindFirstChildWhichIsA("VehicleSeat", true)
+	if seat then
+		hrp.CFrame = seat.CFrame + Vector3.new(0, 3, 0)
+		task.wait(0.3)
+		seat:Sit(char:FindFirstChildOfClass("Humanoid"))
+	end
+end).Parent = holder
+
+-- NoClip
+local noclip = false
+newButton("NoClip: OFF", function(btn)
+	noclip = not noclip
+	btn.Text = "NoClip: " .. (noclip and "ON" or "OFF")
+	if noclip then
+		RunService.Stepped:Connect(function()
+			if noclip and LocalPlayer.Character then
+				for _, p in pairs(LocalPlayer.Character:GetDescendants()) do
+					if p:IsA("BasePart") then p.CanCollide = false end
+				end
+			end
+		end)
+	end
+end).Parent = holder
