@@ -1,0 +1,159 @@
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+ScreenGui.ResetOnSpawn = false
+
+local dragging, dragInput, dragStart, startPos = false
+local function makeDraggable(frame)
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then dragging = false end
+			end)
+		end
+	end)
+	UIS.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+end
+
+local function createButton(text, callback)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(0.45, 0, 0, 40)
+	btn.BackgroundColor3 = Color3.fromRGB(170, 220, 255)
+	btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+	btn.Font = Enum.Font.SourceSansBold
+	btn.TextSize = 18
+	btn.Text = text
+	Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+	btn.MouseButton1Click:Connect(function() callback(btn) end)
+	return btn
+end
+
+-- Main UI Frame
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 400, 0, 400)
+MainFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(120, 180, 255)
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+Instance.new("UIStroke", MainFrame).Color = Color3.fromRGB(0, 85, 170)
+makeDraggable(MainFrame)
+
+-- Title
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, -40, 0, 40)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Kha Menu V1.5"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 22
+Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Close Button (X)
+local CloseBtn = Instance.new("TextButton", MainFrame)
+CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+CloseBtn.Text = "X"
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 20
+CloseBtn.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 4)
+CloseBtn.MouseButton1Click:Connect(function()
+	MainFrame.Visible = false
+end)
+
+-- Nút chứa tính năng
+local ButtonHolder = Instance.new("Frame", MainFrame)
+ButtonHolder.Position = UDim2.new(0, 10, 0, 50)
+ButtonHolder.Size = UDim2.new(1, -20, 1, -100)
+ButtonHolder.BackgroundTransparency = 1
+
+local Layout = Instance.new("UIGridLayout", ButtonHolder)
+Layout.CellSize = UDim2.new(0.45, 0, 0, 40)
+Layout.CellPadding = UDim2.new(0, 10, 0, 10)
+Layout.FillDirectionMaxCells = 4
+Layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Các nút tính năng
+createButton("TP nhà máy Testla", function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua'))()
+end).Parent = ButtonHolder
+
+createButton("TP lâu đài tình ái", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+end).Parent = ButtonHolder
+
+createButton("TP Tháp Pháo", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+end).Parent = ButtonHolder
+
+createButton("Nullfire", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+end).Parent = ButtonHolder
+
+createButton("TP Hầm mỏ", function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua'))()
+end).Parent = ButtonHolder
+
+createButton("TP Cuối", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/TwoGunVolley/Earlyfixed/refs/heads/main/Protected_1408189441085576.txt"))()
+end).Parent = ButtonHolder
+
+createButton("Tăng FPS", function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua'))()
+end).Parent = ButtonHolder
+
+local noclipEnabled = false
+local noclipConn
+createButton("NoClip: OFF", function(btn)
+	noclipEnabled = not noclipEnabled
+	btn.Text = "NoClip: " .. (noclipEnabled and "ON" or "OFF")
+	if noclipEnabled then
+		noclipConn = RunService.Stepped:Connect(function()
+			if LocalPlayer.Character then
+				for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+					if part:IsA("BasePart") then part.CanCollide = false end
+				end
+			end
+		end)
+	else
+		if noclipConn then noclipConn:Disconnect() end
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+				if part:IsA("BasePart") then part.CanCollide = true end
+			end
+		end
+	end
+end).Parent = ButtonHolder
+
+-- Phần thông báo
+local Notice = Instance.new("TextLabel", MainFrame)
+Notice.Size = UDim2.new(1, -20, 0, 30)
+Notice.Position = UDim2.new(0, 10, 1, -40)
+Notice.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+Notice.TextColor3 = Color3.fromRGB(150, 150, 150)
+Notice.Font = Enum.Font.GothamBold
+Notice.TextSize = 14
+Notice.Text = "Thông báo: nếu bạn bật noclip thì tắt trước rồi đóng UI sau vì sẽ tạo lỗi"
+Notice.TextWrapped = true
+Notice.BackgroundTransparency = 0.1
+
+task.delay(10, function()
+	Notice.Visible = false
+end)
+--
