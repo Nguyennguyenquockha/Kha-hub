@@ -1,0 +1,179 @@
+-- KHA HUB V2.5 VIP PRO XỊN XÒ
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local StarterGui = game:GetService("StarterGui")
+local LocalPlayer = Players.LocalPlayer
+
+-- GUI
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "KhaHub"
+
+-- Loading
+local loading = Instance.new("TextLabel", gui)
+loading.Size = UDim2.new(0, 200, 0, 50)
+loading.Position = UDim2.new(0.5, -100, 0.5, -25)
+loading.BackgroundTransparency = 1
+loading.Text = "Đang tải Kha Hub..."
+loading.TextColor3 = Color3.new(1,1,1)
+loading.Font = Enum.Font.SourceSansBold
+loading.TextSize = 24
+
+task.wait(2)
+loading:Destroy()
+
+-- Main Frame
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0, 400, 0, 250)
+main.Position = UDim2.new(0.5, 0, 0.5, 0)
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.BackgroundColor3 = Color3.fromRGB(10, 10, 30)
+main.BackgroundTransparency = 0.1
+main.Visible = true
+
+local uicorner = Instance.new("UICorner", main)
+uicorner.CornerRadius = UDim.new(0, 12)
+
+local stroke = Instance.new("UIStroke", main)
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.Transparency = 0.3
+
+-- Fade in/out function
+local function toggleHub()
+	local target = main.Visible and 1 or 0
+	main.Visible = true
+	TweenService:Create(main, TweenInfo.new(0.4), {BackgroundTransparency = target}):Play()
+	task.wait(0.4)
+	main.Visible = not (target == 1)
+end
+
+-- Toggle Button
+local toggle = Instance.new("TextButton", gui)
+toggle.Size = UDim2.new(0, 120, 0, 30)
+toggle.Position = UDim2.new(0, 10, 0.5, -20)
+toggle.Text = "[ Mở / Tắt ]"
+toggle.BackgroundColor3 = Color3.fromRGB(0, 102, 204)
+toggle.TextColor3 = Color3.new(1, 1, 1)
+toggle.Font = Enum.Font.SourceSansBold
+toggle.TextSize = 18
+Instance.new("UICorner", toggle)
+
+toggle.MouseButton1Click:Connect(toggleHub)
+
+-- Badge Notification
+StarterGui:SetCore("SendNotification", {
+	Title = "Kha Hub",
+	Text = "Cảm ơn đã dùng Kha Hub!",
+	Duration = 4
+})
+
+-- Title
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Text = "Kha Hub V2.0"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 22
+
+-- Button Holder
+local holder = Instance.new("Frame", main)
+holder.Position = UDim2.new(0, 20, 0, 40)
+holder.Size = UDim2.new(1, -40, 1, -80)
+holder.BackgroundTransparency = 1
+
+local layout = Instance.new("UIGridLayout", holder)
+layout.CellSize = UDim2.new(0, 170, 0, 40)
+layout.CellPadding = UDim2.new(0, 10, 0, 10)
+
+-- Page Button
+local pageButton = Instance.new("TextButton", main)
+pageButton.Position = UDim2.new(0.5, -50, 1, -35)
+pageButton.Size = UDim2.new(0, 100, 0, 30)
+pageButton.Text = "Trang >"
+pageButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+pageButton.TextColor3 = Color3.new(1, 1, 1)
+pageButton.Font = Enum.Font.SourceSansBold
+pageButton.TextSize = 18
+Instance.new("UICorner", pageButton)
+
+-- Danh sách tính năng
+local features = {
+	{
+		{"TP Tháp Pháo", "https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"},
+		{"TP Lâu Đài", "https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"},
+		{"TP Tesla", "https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua"},
+		{"TP Hầm Mỏ", "https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua"},
+		{"Nullfire", "https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"},
+		{"Free Horse", "https://raw.githubusercontent.com/IncognitoScripts/DeadRails/refs/heads/main/HorseClass"},
+	},
+	{
+		{"TP Cuối + Noclip", "https://raw.githubusercontent.com/TwoGunVolley/FixedPlease/refs/heads/main/Protected_7197551640341824.txt"},
+		{"TP Về Tàu", [[local char = game.Players.LocalPlayer.Character if char and char:FindFirstChild('HumanoidRootPart') then local seat = workspace:FindFirstChild('Train') and workspace.Train:FindFirstChildWhichIsA('VehicleSeat', true) if seat then char.HumanoidRootPart.CFrame = seat.CFrame + Vector3.new(0, 3, 0) task.wait(0.3) seat:Sit(char:FindFirstChildOfClass('Humanoid')) end end]]},
+		{"Tăng FPS", "https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua"},
+		{"Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+		{"Farm Bonds", [[getgenv().BondFarmSetting = {tweenDuration = 20, AutoExecute = true, CheckMissedBonds = true} loadstring(game:HttpGet('https://raw.githubusercontent.com/DonjoScripts/Public-Scripts/refs/heads/Slap-Battles/TheFastestBondStealer.lua'))()]]},
+		{"Vehicle Fly", "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui"},
+	}
+}
+
+local currentPage = 1
+
+-- Tạo nút tính năng
+local function createFeatureButton(name, code)
+	local btn = Instance.new("TextButton", holder)
+	btn.Text = name
+	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	btn.TextColor3 = Color3.new(1, 1, 1)
+	btn.Font = Enum.Font.SourceSans
+	btn.TextSize = 18
+	Instance.new("UICorner", btn)
+
+	local stroke = Instance.new("UIStroke", btn)
+	stroke.Color = Color3.fromRGB(0, 200, 255)
+	stroke.Transparency = 0.7
+
+	btn.MouseEnter:Connect(function()
+		stroke.Transparency = 0.1
+	end)
+	btn.MouseLeave:Connect(function()
+		stroke.Transparency = 0.7
+	end)
+
+	btn.MouseButton1Click:Connect(function()
+		local success, err = pcall(function()
+			if code:sub(1, 4) == "http" then
+				loadstring(game:HttpGet(code))()
+			else
+				loadstring(code)()
+			end
+		end)
+		if not success then
+			StarterGui:SetCore("SendNotification", {
+				Title = "Lỗi",
+				Text = "Không thể chạy tính năng!",
+				Duration = 3
+			})
+		end
+	end)
+end
+
+-- Load trang
+local function loadPage()
+	for _, child in pairs(holder:GetChildren()) do
+		if child:IsA("TextButton") then
+			child:Destroy()
+		end
+	end
+	for _, feat in ipairs(features[currentPage]) do
+		createFeatureButton(feat[1], feat[2])
+	end
+	pageButton.Text = currentPage == 1 and "Trang >" or "< Trang"
+end
+
+pageButton.MouseButton1Click:Connect(function()
+	currentPage = currentPage == 1 and 2 or 1
+	loadPage()
+end)
+
+loadPage()
