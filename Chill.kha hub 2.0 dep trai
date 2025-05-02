@@ -1,0 +1,113 @@
+local key = tostring(math.random(100, 999)) -- Random key 3 chữ số
+local player = game.Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
+
+-- UI Setup
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "KeyUI"
+ScreenGui.ResetOnSpawn = false
+
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 0, 0, 0)
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 60)
+Frame.BackgroundTransparency = 0.1
+Frame.BorderSizePixel = 0
+
+local UICorner = Instance.new("UICorner", Frame)
+UICorner.CornerRadius = UDim.new(0, 12)
+
+Frame:TweenSize(UDim2.new(0, 300, 0, 200), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true)
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = "Nhập Key để mở Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+local Hint = Instance.new("TextLabel", Frame)
+Hint.Position = UDim2.new(0, 0, 0, 40)
+Hint.Size = UDim2.new(1, 0, 0, 30)
+Hint.BackgroundTransparency = 1
+Hint.Text = "Key của bạn là: "..key
+Hint.TextColor3 = Color3.fromRGB(255, 255, 0)
+Hint.Font = Enum.Font.Gotham
+Hint.TextSize = 18
+
+local TextBox = Instance.new("TextBox", Frame)
+TextBox.Position = UDim2.new(0.5, -100, 0, 80)
+TextBox.Size = UDim2.new(0, 200, 0, 30)
+TextBox.PlaceholderText = "Nhập key..."
+TextBox.Text = ""
+TextBox.Font = Enum.Font.Gotham
+TextBox.TextSize = 18
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 90)
+TextBox.TextColor3 = Color3.new(1,1,1)
+
+local cornerBox = Instance.new("UICorner", TextBox)
+cornerBox.CornerRadius = UDim.new(0, 8)
+
+local CheckButton = Instance.new("TextButton", Frame)
+CheckButton.Position = UDim2.new(0.5, -50, 0, 120)
+CheckButton.Size = UDim2.new(0, 100, 0, 30)
+CheckButton.Text = "Check Key"
+CheckButton.Font = Enum.Font.GothamBold
+CheckButton.TextSize = 18
+CheckButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+CheckButton.TextColor3 = Color3.new(1,1,1)
+
+local cornerBtn = Instance.new("UICorner", CheckButton)
+cornerBtn.CornerRadius = UDim.new(0, 8)
+
+local Result = Instance.new("TextLabel", Frame)
+Result.Position = UDim2.new(0, 0, 1, -25)
+Result.Size = UDim2.new(1, 0, 0, 20)
+Result.BackgroundTransparency = 1
+Result.Text = ""
+Result.TextColor3 = Color3.fromRGB(255, 80, 80)
+Result.Font = Enum.Font.Gotham
+Result.TextSize = 16
+
+-- Hiệu ứng hạt xanh khi đúng key
+local function greenParticles(pos)
+	for i = 1, 12 do
+		local p = Instance.new("Frame", ScreenGui)
+		p.Size = UDim2.new(0, 6, 0, 6)
+		p.Position = pos
+		p.BackgroundColor3 = Color3.fromRGB(80, 255, 80)
+		p.BorderSizePixel = 0
+		p.AnchorPoint = Vector2.new(0.5, 0.5)
+		p.BackgroundTransparency = 0.2
+
+		local pc = Instance.new("UICorner", p)
+		pc.CornerRadius = UDim.new(1, 0)
+
+		local move = TweenService:Create(p, TweenInfo.new(0.6), {
+			Position = UDim2.new(pos.X.Scale, pos.X.Offset + math.random(-60,60), pos.Y.Scale, pos.Y.Offset + math.random(-60,60)),
+			BackgroundTransparency = 1
+		})
+		move:Play()
+		Debris:AddItem(p, 0.7)
+	end
+end
+
+CheckButton.MouseButton1Click:Connect(function()
+	if TextBox.Text == key then
+		Result.TextColor3 = Color3.fromRGB(80, 255, 80)
+		Result.Text = "Đúng key! Đang mở hub..."
+		greenParticles(CheckButton.Position)
+		wait(1)
+		ScreenGui:Destroy()
+		-- Mở hub của bạn ở đây
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Nguyennguyenquockha/Kha-hub/refs/heads/main/C.txt"))()
+	else
+		Result.TextColor3 = Color3.fromRGB(255, 80, 80)
+		Result.Text = "Sai key!"
+		wait(2)
+		Result.Text = ""
+	end
+end)
