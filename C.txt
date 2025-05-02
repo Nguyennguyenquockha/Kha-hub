@@ -1,0 +1,102 @@
+local player = game.Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+-- Tạo GUI
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "HubSelectorUI"
+ScreenGui.ResetOnSpawn = false
+
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 320, 0, 220) -- To hơn bảng nhập key 20px
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 60)
+Frame.BackgroundTransparency = 0.1
+Frame.BorderSizePixel = 0
+
+local UICorner = Instance.new("UICorner", Frame)
+UICorner.CornerRadius = UDim.new(0, 12)
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = "Chọn Phiên Bản Kha Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+-- Dropdown
+local Dropdown = Instance.new("TextButton", Frame)
+Dropdown.Position = UDim2.new(0.5, -100, 0, 70)
+Dropdown.Size = UDim2.new(0, 200, 0, 30)
+Dropdown.Text = "Kha Hub 1.5"
+Dropdown.Font = Enum.Font.Gotham
+Dropdown.TextSize = 18
+Dropdown.BackgroundColor3 = Color3.fromRGB(50, 50, 90)
+Dropdown.TextColor3 = Color3.new(1,1,1)
+local DropCorner = Instance.new("UICorner", Dropdown)
+DropCorner.CornerRadius = UDim.new(0, 8)
+
+-- List
+local DropList = Instance.new("Frame", Frame)
+DropList.Position = UDim2.new(0.5, -100, 0, 100)
+DropList.Size = UDim2.new(0, 200, 0, 90)
+DropList.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
+DropList.Visible = false
+local DropUICorner = Instance.new("UICorner", DropList)
+DropUICorner.CornerRadius = UDim.new(0, 8)
+
+local UIListLayout = Instance.new("UIListLayout", DropList)
+
+local options = {
+	{"Kha Hub 1.5", "https://raw.githubusercontent.com/Nguyennguyenquockha/Kha-hub/main/kha_hub1.5.txt"},
+	{"Kha Hub 2.0", "https://raw.githubusercontent.com/Nguyennguyenquockha/Kha-hub/main/kha_hub2.0.txt"},
+	{"Coming Soon", nil},
+}
+
+local selectedUrl = options[1][2]
+
+for _, opt in ipairs(options) do
+	local btn = Instance.new("TextButton", DropList)
+	btn.Size = UDim2.new(1, 0, 0, 30)
+	btn.Text = opt[1]
+	btn.BackgroundColor3 = Color3.fromRGB(60, 60, 90)
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 16
+	local bcorner = Instance.new("UICorner", btn)
+	bcorner.CornerRadius = UDim.new(0, 6)
+
+	btn.MouseButton1Click:Connect(function()
+		Dropdown.Text = opt[1]
+		selectedUrl = opt[2]
+		DropList.Visible = false
+	end)
+end
+
+Dropdown.MouseButton1Click:Connect(function()
+	DropList.Visible = not DropList.Visible
+end)
+
+-- Nút chạy hub
+local RunButton = Instance.new("TextButton", Frame)
+RunButton.Position = UDim2.new(0.5, -50, 0, 140)
+RunButton.Size = UDim2.new(0, 100, 0, 30)
+RunButton.Text = "Chạy Hub"
+RunButton.Font = Enum.Font.GothamBold
+RunButton.TextSize = 18
+RunButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+RunButton.TextColor3 = Color3.new(1,1,1)
+local runCorner = Instance.new("UICorner", RunButton)
+runCorner.CornerRadius = UDim.new(0, 8)
+
+RunButton.MouseButton1Click:Connect(function()
+	if selectedUrl then
+		ScreenGui:Destroy()
+		loadstring(game:HttpGet(selectedUrl))()
+	else
+		RunButton.Text = "Sắp ra mắt!"
+		wait(1.5)
+		RunButton.Text = "Chạy Hub"
+	end
+end)
