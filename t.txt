@@ -1,0 +1,95 @@
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "KhaHub"
+ 
+-- Khung chính
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 260, 0, 250)
+frame.Position = UDim2.new(0, 20, 0, 20)
+frame.BackgroundColor3 = Color3.fromRGB(128, 0, 255)
+frame.BorderSizePixel = 0
+frame.Name = "MainFrame"
+ 
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0, 12)
+ 
+-- Tiêu đề
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Kha hub v1"
+title.TextColor3 = Color3.fromRGB(220, 200, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 24
+ 
+-- Ghi credit
+local credit = Instance.new("TextLabel", frame)
+credit.Size = UDim2.new(1, -10, 0, 20)
+credit.Position = UDim2.new(0, 5, 1, -25)
+credit.BackgroundTransparency = 1
+credit.Text = "Credit: kha & chatgpt"
+credit.TextColor3 = Color3.fromRGB(100, 255, 255)
+credit.Font = Enum.Font.Gotham
+credit.TextSize = 14
+credit.TextXAlignment = Enum.TextXAlignment.Left
+ 
+-- Nút Reset
+local resetBtn = Instance.new("TextButton", frame)
+resetBtn.Size = UDim2.new(0.7, 0, 0, 40)
+resetBtn.Position = UDim2.new(0.05, 0, 0, 50)
+resetBtn.Text = "Reset"
+resetBtn.TextColor3 = Color3.fromRGB(100, 255, 255)
+resetBtn.BackgroundColor3 = Color3.fromRGB(170, 0, 255)
+resetBtn.Font = Enum.Font.GothamBold
+resetBtn.TextSize = 18
+Instance.new("UICorner", resetBtn).CornerRadius = UDim.new(0, 8)
+ 
+resetBtn.MouseButton1Click:Connect(function()
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = 16
+		humanoid.JumpPower = 50
+	end
+end)
+ 
+-- Nút Inf Jump
+local infJumpBtn = Instance.new("TextButton", frame)
+infJumpBtn.Size = UDim2.new(0.5, 0, 0, 40)
+infJumpBtn.Position = UDim2.new(0.05, 0, 0, 110)
+infJumpBtn.Text = "Inf Jump"
+infJumpBtn.TextColor3 = Color3.fromRGB(100, 255, 255)
+infJumpBtn.BackgroundColor3 = Color3.fromRGB(170, 0, 255)
+infJumpBtn.Font = Enum.Font.GothamBold
+infJumpBtn.TextSize = 18
+Instance.new("UICorner", infJumpBtn).CornerRadius = UDim.new(0, 8)
+ 
+-- Nút On/Off
+local toggleBtn = Instance.new("TextButton", frame)
+toggleBtn.Size = UDim2.new(0, 60, 0, 30)
+toggleBtn.Position = UDim2.new(0.65, 0, 0, 115)
+toggleBtn.Text = "Off"
+toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+toggleBtn.Font = Enum.Font.GothamBold
+toggleBtn.TextSize = 16
+Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 10)
+ 
+-- Logic bật/tắt Infinite Jump
+local infJumpEnabled = false
+toggleBtn.MouseButton1Click:Connect(function()
+	infJumpEnabled = not infJumpEnabled
+	toggleBtn.Text = infJumpEnabled and "On" or "Off"
+	toggleBtn.BackgroundColor3 = infJumpEnabled and Color3.fromRGB(0, 255, 170) or Color3.fromRGB(100, 100, 100)
+end)
+ 
+-- Thực hiện Infinite Jump nếu bật
+game:GetService("UserInputService").JumpRequest:Connect(function()
+	if infJumpEnabled and player.Character then
+		local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+	end
+end)
