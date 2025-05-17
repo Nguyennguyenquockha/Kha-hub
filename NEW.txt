@@ -1,0 +1,80 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "🤯Kha Hub 2.5 Dead Rails🐧",
+   Icon = 10670510697,
+   LoadingTitle = "Loading....",
+   LoadingSubtitle = "by Sey_Roblox",
+   Theme = "DarkBlue",
+
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = "main",
+      FileName = "Kha Hub"
+   },
+})
+
+-- Tab: Dead Rails
+local MainTab = Window:CreateTab("Dead Rails", 122874126897828)
+MainTab:CreateSection("Main Features")
+
+MainTab:CreateButton({
+   Name = "Null_Fire Script",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Infinite Yield",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {10, 100},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "WalkSpeedSlider",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+Rayfield:Notify({
+   Title = "Kha Hub 2.5 Loaded!",
+   Content = "Your hub are ready now! ",
+   Duration = 5.5,
+   Image = 4483362458,
+})
+
+-- Tab: Teleport Map
+local TeleportTab = Window:CreateTab("💥Teleport Map", 4483362458)
+TeleportTab:CreateSection("Map Teleport")
+
+local selectedLocation = "Castle"
+
+TeleportTab:CreateDropdown({
+   Name = "Select a location",
+   Options = {"Castle", "Fort"},
+   CurrentOption = {"Castle"},
+   MultipleOptions = false,
+   Flag = "TeleportDropdown",
+   Callback = function(Options)
+      selectedLocation = Options[1]
+   end,
+})
+
+TeleportTab:CreateButton({
+   Name = "Click to Teleport",
+   Callback = function()
+      if selectedLocation == "Castle" then
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+      elseif selectedLocation == "Fort" then
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+      end
+   end,
+})
