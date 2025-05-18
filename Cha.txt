@@ -1,0 +1,58 @@
+local coalESPEnabled = false
+local function isCoal(part)
+    return part:IsA("BasePart") and part.Name == "Coal"
+end
+
+local function makeESP(part)
+    if part:FindFirstChild("CoalESP") then return end
+
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "CoalESP"
+    highlight.Adornee = part
+    highlight.FillColor = Color3.fromRGB(0, 255, 255)
+    highlight.OutlineColor = Color3.fromRGB(0, 100, 255)
+    highlight.FillTransparency = 0.2
+    highlight.OutlineTransparency = 0
+    highlight.Parent = part
+
+    local bb = Instance.new("BillboardGui", part)
+    bb.Name = "CoalESP"
+    bb.Adornee = part
+    bb.Size = UDim2.new(0, 60, 0, 20)
+    bb.StudsOffset = Vector3.new(0, 1.5, 0)
+    bb.AlwaysOnTop = true
+
+    local label = Instance.new("TextLabel", bb)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.Text = "Coal"
+    label.BackgroundTransparency = 1
+    label.TextScaled = true
+    label.Font = Enum.Font.SourceSans
+    label.TextColor3 = Color3.fromRGB(0, 255, 255)
+end
+
+local function startCoalESP()
+    coalESPEnabled = true
+    task.spawn(function()
+        while coalESPEnabled do
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if isCoal(v) then
+                    makeESP(v)
+                end
+            end
+            task.wait(2)
+        end
+    end)
+end
+
+local function stopCoalESP()
+    coalESPEnabled = false
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v:FindFirstChild("CoalESP") then
+            v:FindFirstChild("CoalESP"):Destroy()
+        end
+        if v:IsA("BillboardGui") and v.Name == "CoalESP" then
+            v:Destroy()
+        end
+    end
+end
