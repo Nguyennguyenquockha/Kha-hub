@@ -1,0 +1,198 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "🤯Kha Hub 2.5 Dead Rails🐧",
+   Icon = 10670510697,
+   LoadingTitle = "Loading....",
+   LoadingSubtitle = "by Sey_Roblox",
+   Theme = "DarkBlue",
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = "main",
+      FileName = "Kha Hub"
+   },
+})
+
+Rayfield:Notify({
+   Title = "Kha Hub 2.5 Loaded!",
+   Content = "Your hub are ready now!",
+   Duration = 5.5,
+   Image = 4483362458,
+})
+
+--==[ Tab: Dead Rails ]==--
+local MainTab = Window:CreateTab("Dead Rails", 122874126897828)
+MainTab:CreateSection("Main Features")
+
+MainTab:CreateButton({
+   Name = "Null_Fire Script",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Infinite Yield",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Npc Lock",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/Nguyennguyenquockha/Kha-hub/refs/heads/main/hello.txt'))()
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {10, 100},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "WalkSpeedSlider",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+-- ESP COAL
+local coalESPEnabled = false
+
+local function isCoal(part)
+    return part:IsA("BasePart") and part.Name == "Coal"
+end
+
+local function makeESP(part)
+    if part:FindFirstChild("CoalESP") then return end
+
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "CoalESP"
+    highlight.Adornee = part
+    highlight.FillColor = Color3.fromRGB(0, 255, 255)
+    highlight.OutlineColor = Color3.fromRGB(0, 100, 255)
+    highlight.FillTransparency = 0.2
+    highlight.OutlineTransparency = 0
+    highlight.Parent = part
+
+    local bb = Instance.new("BillboardGui", part)
+    bb.Name = "CoalESP"
+    bb.Adornee = part
+    bb.Size = UDim2.new(0, 60, 0, 20)
+    bb.StudsOffset = Vector3.new(0, 1.5, 0)
+    bb.AlwaysOnTop = true
+
+    local label = Instance.new("TextLabel", bb)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.Text = "Coal"
+    label.BackgroundTransparency = 1
+    label.TextScaled = true
+    label.Font = Enum.Font.SourceSans
+    label.TextColor3 = Color3.fromRGB(0, 255, 255)
+end
+
+local function startCoalESP()
+    task.spawn(function()
+        while coalESPEnabled do
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if isCoal(v) then
+                    makeESP(v)
+                end
+            end
+            task.wait(2)
+        end
+    end)
+end
+
+local function stopCoalESP()
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v:FindFirstChild("CoalESP") then
+            v:FindFirstChild("CoalESP"):Destroy()
+        end
+        if v:IsA("BillboardGui") and v.Name == "CoalESP" then
+            v:Destroy()
+        end
+    end
+end
+
+MainTab:CreateToggle({
+   Name = "ESP Coal",
+   CurrentValue = false,
+   Flag = "Toggle_CoalESP",
+   Callback = function(Value)
+       coalESPEnabled = Value
+       if Value then
+           startCoalESP()
+       else
+           stopCoalESP()
+       end
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Tăng FPS",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Vehicle Fly",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Bypass Anti-Cheat",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/AmareScripts/DeadRails/refs/heads/main/Bypass%25AntiCheat.lua"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Free Horse Class",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/IncognitoScripts/DeadRails/refs/heads/main/HorseClass"))()
+   end,
+})
+
+--==[ Tab: Teleport Map ]==--
+local teleportTab = Window:CreateTab("💥Teleport Map", 4483362458)
+teleportTab:CreateSection("Map Teleport")
+
+local teleportOptions = {
+    "Castle",
+    "Fort",
+    "Sterling Town",
+    "Tesla Lab"
+}
+
+local selectedTeleport = "Castle"
+
+teleportTab:CreateDropdown({
+    Name = "Select Location",
+    Options = teleportOptions,
+    CurrentOption = {selectedTeleport},
+    MultipleOptions = false,
+    Flag = "TeleportDropdown",
+    Callback = function(option)
+        selectedTeleport = option[1]
+    end,
+})
+
+teleportTab:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        if selectedTeleport == "Castle" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+        elseif selectedTeleport == "Fort" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+        elseif selectedTeleport == "Sterling Town" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua"))()
+        elseif selectedTeleport == "Tesla Lab" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua"))()
+        end
+    end,
+})
