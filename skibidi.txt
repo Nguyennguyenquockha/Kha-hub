@@ -1,0 +1,672 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "🤯Kha Hub 3.7 Dead Rails🐧",
+   Icon = 10670510697,
+   LoadingTitle = "Loading....",
+   LoadingSubtitle = "by Sey_Roblox",
+   Theme = "Ocean",
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = "main",
+      FileName = "Kha Hub"
+   },
+})
+
+local MainTab = Window:CreateTab("Dead Rails", 122874126897828)
+MainTab:CreateSection("Main Features")
+
+Rayfield:Notify({
+   Title = "Kha Hub 3.7 Loaded!",
+   Content = "Script/code by sey_roblox!",
+   Duration = 5.5,
+   Image = 79191407851653,
+})
+
+MainTab:CreateButton({
+   Name = "Null_Fire Script",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Aimbot NPC (monster) ",
+   Callback = function()
+     loadstring(game:HttpGet('https://raw.githubusercontent.com/Nguyennguyenquockha/1/refs/heads/main/full.txt'))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Vehicle Fly",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Bypass Anti-Cheat",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/AmareScripts/DeadRails/refs/heads/main/Bypass%25AntiCheat.lua"))()
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Auto swing(đánh) OP",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/Dusty/refs/heads/main/OPAUTOSWINGV2"))()
+   end,
+})
+
+local VisualTab = Window:CreateTab("Visual🤔", 124285276508951)
+VisualTab:CreateSection("Esp items")
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Coal",
+    CustomName = "Coal",
+    Color = Color3.fromRGB(0, 0, 0),
+    IsEnabled = "CoalESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Coal",
+    CurrentValue = false,
+    Flag = "ToggleCoalESP",
+    Callback = function(state)
+        ESP.CoalESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+local BandageESPEnabled = false
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Bandage",
+    CustomName = "Bandage",
+    Color = Color3.fromRGB(238, 106, 167),
+    PrimaryPart = "Handle", -- Vẽ ESP đúng vị trí Handle
+    IsEnabled = function(obj)
+        return BandageESPEnabled
+    end
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Bandage",
+    CurrentValue = false,
+    Flag = "ToggleBandageESP",
+    Callback = function(state)
+        BandageESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Newspaper",
+    CustomName = "Newspaper",
+    Color = Color3.fromRGB(255, 0, 0),
+    IsEnabled = "NewspaperESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Newspaper",
+    CurrentValue = false,
+    Flag = "ToggleNewspaperESP",
+    Callback = function(state)
+        ESP.NewspaperESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+local MonsterESPEnabled = false
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Model_Runner",
+    CustomName = "Monster",
+    Color = Color3.fromRGB(255, 0, 0), -- Màu đỏ
+    PrimaryPart = "Torso",
+    IsEnabled = function(obj)
+        return MonsterESPEnabled
+    end
+})
+
+local Toggle = CreditTab:CreateToggle({
+    Name = "ESP dead Monster (bản test v1)",
+    CurrentValue = false,
+    Flag = "ToggleMonsterESP",
+    Callback = function(state)
+        MonsterESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+-- Biến bật/tắt ESP Navy Revolver
+local NavyESPEnabled = false
+
+-- Theo dõi Navy Revolver
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Navy Revolver",
+    CustomName = "Navy Revolver",
+    Color = Color3.fromRGB(198, 226, 255),
+    PrimaryPart = "Handle",
+    IsEnabled = function(obj)
+        return NavyESPEnabled
+    end
+})
+
+-- Toggle ESP Navy Revolver
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Navy Revolver",
+    CurrentValue = false,
+    Flag = "ToggleNavyESP",
+    Callback = function(state)
+        NavyESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "GoldBar",
+    CustomName = "vàng",
+    Color = Color3.fromRGB(255, 255, 0),
+    IsEnabled = "GoldbarESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP vàng🤑",
+    CurrentValue = false,
+    Flag = "ToggleGoldbarESP",
+    Callback = function(state)
+        ESP.GoldbarESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Bond",
+    CustomName = "Bond",
+    Color = Color3.fromRGB(244, 164, 96),
+    IsEnabled = "BondsESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Bond🤯",
+    CurrentValue = false,
+    Flag = "ToggleBondESP",
+    Callback = function(state)
+        ESP.BondsESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "BarbedWire",
+    CustomName = "rào sắt",
+    Color = Color3.fromRGB(128, 128, 128),
+    IsEnabled = "BarbedwireESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP barbedwire",
+    CurrentValue = false,
+    Flag = "ToggleBarbedwireESP",
+    Callback = function(state)
+        ESP.BarbedwireESPEnabled = state
+    end
+})
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "SilverBar",
+    CustomName = "sắt",
+    Color = Color3.fromRGB(192, 192, 192),
+    IsEnabled = "SilverBarESPEnabled"
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP sắt:0",
+    CurrentValue = false,
+    Flag = "ToggleSilverESP",
+    Callback = function(state)
+        ESP.SilverBarESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+-- Biến bật/tắt ESP Saddle
+local SaddleESPEnabled = false
+
+-- Theo dõi Saddle
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Saddle",
+    CustomName = "Saddle",
+    Color = Color3.fromRGB(210, 105, 30), 
+    PrimaryPart = "MeshPart",
+    IsEnabled = function(obj)
+        return SaddleESPEnabled
+    end
+})
+
+-- Toggle ESP Saddle
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Saddle",
+    CurrentValue = false,
+    Flag = "ToggleSaddleESP",
+    Callback = function(state)
+        SaddleESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+local BanjoESPEnabled = false
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Banjo",
+    CustomName = "Banjo",
+    Color = Color3.fromRGB(238, 207, 161),
+    PrimaryPart = "Handle",
+    IsEnabled = function(obj)
+        return BanjoESPEnabled
+    end
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Banjo (nhạc cụ)",
+    CurrentValue = false,
+    Flag = "ToggleBanjoESP",
+    Callback = function(state)
+        BanjoESPEnabled = state
+    end
+})
+
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+-- Biến bật/tắt ESP Unicorn
+local UnicornESPEnabled = false
+
+-- Theo dõi Unicorn
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Model_Unicorn",
+    CustomName = "Unicorn",
+    Color = Color3.fromRGB(255, 105, 180),
+    PrimaryPart = "Saddle",
+    IsEnabled = function(obj)
+        return UnicornESPEnabled
+    end
+})
+
+-- Toggle ESP Unicorn
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Unicorn🤯",
+    CurrentValue = false,
+    Flag = "ToggleUnicornESP",
+    Callback = function(state)
+        UnicornESPEnabled = state
+    end
+}), 
+
+local ESP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Nguyennguyenquockha/1/refs/heads/main/fury.txt'))()
+ESP.Players = false
+ESP.Boxes = false
+ESP.Names = true
+ESP:Toggle(true)
+
+local CameraESPEnabled = false
+
+ESP:AddObjectListener(workspace.RuntimeItems, {
+    Name = "Camera",
+    CustomName = "Camera",
+    Color = Color3.fromRGB(210, 105, 30),
+    PrimaryPart = "Root",
+    IsEnabled = function(obj)
+        return CameraESPEnabled
+    end
+})
+
+local Toggle = VisualTab:CreateToggle({
+    Name = "ESP Camera",
+    CurrentValue = false,
+    Flag = "ToggleCameraESP",
+    Callback = function(state)
+        CameraESPEnabled = state
+    end
+})
+
+local teleportTab = Window:CreateTab("💥Teleport Map", 76118072590572)
+teleportTab:CreateSection("Map Teleport")
+
+local teleportOptions = {
+    "Castle",
+    "Fort",
+    "Sterling Town",
+    "Tesla Lab"
+}
+
+local selectedTeleport = "Castle"
+
+teleportTab:CreateDropdown({
+    Name = "Select Location",
+    Options = teleportOptions,
+    CurrentOption = {selectedTeleport},
+    MultipleOptions = false,
+    Flag = "TeleportDropdown",
+    Callback = function(option)
+        selectedTeleport = option[1]
+    end,
+})
+
+teleportTab:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        if selectedTeleport == "Castle" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+        elseif selectedTeleport == "Fort" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+        elseif selectedTeleport == "Sterling Town" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua"))()
+        elseif selectedTeleport == "Tesla Lab" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua"))()
+        end
+    end,
+})
+
+local MiscTab = Window:CreateTab("🤓Misc", 4483362458)
+MiscTab:CreateSection("Misc script")
+MiscTab:CreateButton({
+   Name = "Tăng FPS",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/vexroxd/My-Script-/main/roblox%20fps%20unlocker%20script.lua"))()
+   end,
+})
+
+MiscTab:CreateButton({
+   Name = "Fly GUI V3",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+   end,
+})
+
+local Lighting = game:GetService("Lighting")
+local fullbrightEnabled = false
+local fullbrightLoop = nil
+local oldLightingSettings = {}
+
+MiscTab:CreateToggle({
+    Name = "Full Bright nâng cao",
+    CurrentValue = false,
+    Callback = function(Value)
+        fullbrightEnabled = Value
+        if Value then
+            oldLightingSettings.Brightness = Lighting.Brightness
+            oldLightingSettings.ClockTime = Lighting.ClockTime
+            oldLightingSettings.FogEnd = Lighting.FogEnd
+            oldLightingSettings.GlobalShadows = Lighting.GlobalShadows
+            oldLightingSettings.OutdoorAmbient = Lighting.OutdoorAmbient
+
+            fullbrightLoop = game:GetService("RunService").RenderStepped:Connect(function()
+                Lighting.Brightness = 2
+                Lighting.ClockTime = 14
+                Lighting.FogEnd = 100000
+                Lighting.GlobalShadows = false
+                Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+            end)
+        else
+            if fullbrightLoop then fullbrightLoop:Disconnect() end
+            for setting, value in pairs(oldLightingSettings) do
+                Lighting[setting] = value
+            end
+        end
+    end,
+})
+
+MiscTab:CreateButton({
+   Name = "🤡Auto bonds vip pro🤡",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/WawesDEV/master-lua-script/refs/heads/main/DeadRails/AutoWin/RailsScript%2520%2510.lua"))()
+   end,
+})
+
+_G.infiniteJump = false
+
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    if _G.infiniteJump then
+        local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+
+Rayfield:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Flag = "InfiniteJumpToggle",
+    Callback = function(value)
+        _G.infiniteJump = value
+    end
+})
+
+local ESPEnabled = false
+local ESPConnections = {}
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+-- Hàm tạo ESP
+local function createESP(player)
+    if player == LocalPlayer then return end
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    if character:FindFirstChild("ESP_Box") then return end
+
+    -- Box
+    local box = Instance.new("BillboardGui", character)
+    box.Name = "ESP_Box"
+    box.Adornee = character:WaitForChild("HumanoidRootPart")
+    box.Size = UDim2.new(4,0,5,0)
+    box.StudsOffset = Vector3.new(0,2.5,0)
+    box.AlwaysOnTop = true
+
+    local frame = Instance.new("Frame", box)
+    frame.Size = UDim2.new(1,0,1,0)
+    frame.BorderSizePixel = 1
+    frame.BorderColor3 = Color3.fromRGB(144, 238, 144)
+    frame.BackgroundTransparency = 1
+
+    local nameLabel = Instance.new("TextLabel", box)
+    nameLabel.Text = player.Name
+    nameLabel.Size = UDim2.new(1, 0, 0, 10)
+    nameLabel.Position = UDim2.new(0, 0, -0.2, 0)
+    nameLabel.TextScaled = false
+    nameLabel.TextSize = 8
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.TextColor3 = Color3.new(1,1,1)
+
+    -- Aura
+    if not character:FindFirstChild("AuraPart") then
+        local aura = Instance.new("Part", character)
+        aura.Name = "AuraPart"
+        aura.Shape = Enum.PartType.Ball
+        aura.Size = Vector3.new(6,6,6)
+        aura.Transparency = 0.7
+        aura.Anchored = true
+        aura.CanCollide = false
+        aura.Material = Enum.Material.Neon
+        aura.Color = Color3.fromRGB(144, 238, 144)
+    end
+
+    -- Tracer
+    if not character:FindFirstChild("Tracer") then
+        local tracer = Instance.new("Beam", character)
+        tracer.Name = "Tracer"
+        local a = Instance.new("Attachment", character.HumanoidRootPart)
+        local b = Instance.new("Attachment", workspace.Terrain)
+        b.WorldPosition = Vector3.new(character.HumanoidRootPart.Position.X, 0.1, character.HumanoidRootPart.Position.Z)
+        tracer.Attachment0 = b
+        tracer.Attachment1 = a
+        tracer.Width0 = 0.1
+        tracer.Width1 = 0.1
+        tracer.Color = ColorSequence.new(Color3.fromRGB(144, 238, 144))
+        tracer.Transparency = NumberSequence.new(0.2)
+    end
+end
+
+-- Toggle trong Rayfield
+YourTab:CreateToggle({
+    Name = "ESP Player",
+    CurrentValue = false,
+    Flag = "ESPToggle",
+    Callback = function(Value)
+        ESPEnabled = Value
+
+        if ESPEnabled then
+            ESPConnections.Render = RunService.RenderStepped:Connect(function()
+                for _,player in pairs(Players:GetPlayers()) do
+                    if player.Character then
+                        if not player.Character:FindFirstChild("ESP_Box") then
+                            createESP(player)
+                        end
+                        if player.Character:FindFirstChild("AuraPart") then
+                            player.Character.AuraPart.Position = player.Character:WaitForChild("HumanoidRootPart").Position
+                        end
+                    end
+                end
+            end)
+        else
+            -- Tắt ESP
+            for _,player in pairs(Players:GetPlayers()) do
+                if player.Character then
+                    if player.Character:FindFirstChild("ESP_Box") then
+                        player.Character.ESP_Box:Destroy()
+                    end
+                    if player.Character:FindFirstChild("AuraPart") then
+                        player.Character.AuraPart:Destroy()
+                    end
+                    if player.Character:FindFirstChild("Tracer") then
+                        player.Character.Tracer:Destroy()
+                    end
+                end
+            end
+            if ESPConnections.Render then
+                ESPConnections.Render:Disconnect()
+                ESPConnections.Render = nil
+            end
+        end
+    end,
+})
+
+MiscTab:CreateButton({
+   Name = "auto farm bonds (patched) ",
+   Callback = function()
+getgenv().BondFarmSetting = {
+    tweenDuration = 18, -- The lower it goes, the faster you teleport, Best is 15-18.
+    AutoExecute = true,
+    CheckMissedBonds = true,
+    WebhookUrl = "URL_HERE",
+    autoSHOPDelay = 70 -- How long it will wait to make you server hop, avoid stuck.
+}
+EnabledScript = true
+SaveNewSettings = true
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DonjoScripts/Public-Scripts/refs/heads/Slap-Battles/Deadrails_Obfucasted_19839292790.lua"))()
+   end,
+})
+
+local OtherTab = Window:CreateTab("More", 12655175600)
+OtherTab:CreateSection("other script")
+OtherTab:CreateButton({
+   Name = "Aimbot player by AI🤡",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/Nguyennguyenquockha/1/refs/heads/main/Ch.txt'))()
+   end,
+})
+
+OtherTab:CreateSlider({
+   Name = "Jump Power",
+   Range = {1, 200},
+   Increment = 1,
+   Suffix = "JP",
+   CurrentValue = 50,
+   Flag = "JumpPowerSlider",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+   end,
+})
+
+OtherTab:CreateButton({
+   Name = "npc lock",
+   Callback = function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Nguyennguyenquockha/Kha-hub/refs/heads/main/Chuly.txt'))()
+   end,
+})
+
+OtherTab:CreateButton({
+   Name = "Infinite Yield",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+   end,
+})
+
+OtherTab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {10, 100},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "WalkSpeedSlider",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
