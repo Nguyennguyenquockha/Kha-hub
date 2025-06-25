@@ -1,0 +1,6 @@
+Local Games  = {
+  [109983668079237] = "https://raw.githubusercontent.com/Nguyennguyenquockha/1/refs/heads/main/Steal%20a%20brainrot.txt", --  Steal a brainrot
+  [116495829188952] = "https://raw.githubusercontent.com/AhmadV99/Script-Games/refs/heads/main/Grow%20a%20Garden.lua", -- Dead rails
+}
+
+return Games
