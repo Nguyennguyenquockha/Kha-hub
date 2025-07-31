@@ -1,0 +1,189 @@
+-- KhaLib - VIP PRO UI Library Full -- Made by ChatGPT & Kha
+
+local TweenService = game:GetService("TweenService") local UserInputService = game:GetService("UserInputService") local CoreGui = game:GetService("CoreGui") local library = {}
+
+local function createCorner(radius, parent) local corner = Instance.new("UICorner") corner.CornerRadius = UDim.new(0, radius) corner.Parent = parent end
+
+local function makeDraggable(frame) local dragging, dragInput, dragStart, startPos frame.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true dragStart = input.Position startPos = frame.Position input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragging = false end end) end end) frame.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end end) UserInputService.InputChanged:Connect(function(input) if input == dragInput and dragging then local delta = input.Position - dragStart frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) end end) end
+
+-- UI Main local ScreenGui = Instance.new("ScreenGui", CoreGui) ScreenGui.Name = "KhaLib" ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local Main = Instance.new("Frame", ScreenGui) Main.Size = UDim2.new(0, 520, 0, 380) Main.Position = UDim2.new(0.5, -260, 0.5, -190) Main.BackgroundColor3 = Color3.fromRGB(20, 20, 30) createCorner(12, Main)
+
+local Title = Instance.new("TextLabel", Main) Title.Size = UDim2.new(1, 0, 0, 40) Title.BackgroundTransparency = 1 Title.Text = "KhaLib UI - VIP PRO" Title.Font = Enum.Font.GothamBold Title.TextSize = 22 Title.TextColor3 = Color3.fromRGB(100, 255, 150)
+
+local TabHolder = Instance.new("Frame", Main) TabHolder.Position = UDim2.new(0, 0, 0, 40) TabHolder.Size = UDim2.new(0, 130, 1, -40) TabHolder.BackgroundColor3 = Color3.fromRGB(15, 15, 20) createCorner(8, TabHolder)
+
+local PageHolder = Instance.new("Frame", Main) PageHolder.Position = UDim2.new(0, 135, 0, 45) PageHolder.Size = UDim2.new(1, -140, 1, -50) PageHolder.BackgroundTransparency = 1
+
+local TabList = Instance.new("UIListLayout", TabHolder) TabList.FillDirection = Enum.FillDirection.Vertical TabList.SortOrder = Enum.SortOrder.LayoutOrder TabList.Padding = UDim.new(0, 5)
+
+makeDraggable(Main)
+
+function library:CreateTab(name) local tabBtn = Instance.new("TextButton", TabHolder) tabBtn.Size = UDim2.new(1, -10, 0, 30) tabBtn.Position = UDim2.new(0, 5, 0, 0) tabBtn.Text = name tabBtn.Font = Enum.Font.GothamSemibold tabBtn.TextSize = 14 tabBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40) tabBtn.TextColor3 = Color3.fromRGB(255, 255, 255) createCorner(8, tabBtn)
+
+local page = Instance.new("ScrollingFrame", PageHolder)
+page.Size = UDim2.new(1, 0, 1, 0)
+page.CanvasSize = UDim2.new(0, 0, 5, 0)
+page.BackgroundTransparency = 1
+page.ScrollBarThickness = 4
+page.Visible = false
+
+local layout = Instance.new("UIListLayout", page)
+layout.Padding = UDim.new(0, 6)
+
+tabBtn.MouseButton1Click:Connect(function()
+    for _, v in pairs(PageHolder:GetChildren()) do
+        if v:IsA("ScrollingFrame") then v.Visible = false end
+    end
+    page.Visible = true
+end)
+
+local tabTable = {}
+
+function tabTable:AddLabel(text)
+    local lbl = Instance.new("TextLabel", page)
+    lbl.Size = UDim2.new(1, -10, 0, 25)
+    lbl.Text = text
+    lbl.BackgroundTransparency = 1
+    lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
+    lbl.Font = Enum.Font.Gotham
+    lbl.TextSize = 13
+end
+
+function tabTable:AddButton(text, callback)
+    local btn = Instance.new("TextButton", page)
+    btn.Size = UDim2.new(1, -10, 0, 30)
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.Gotham
+    btn.TextSize = 14
+    createCorner(8, btn)
+    btn.MouseButton1Click:Connect(function()
+        pcall(callback)
+    end)
+end
+
+function tabTable:AddToggle(text, default, callback)
+    local toggled = default
+    local toggleBtn = Instance.new("TextButton", page)
+    toggleBtn.Size = UDim2.new(1, -10, 0, 30)
+    toggleBtn.Text = text .. " [" .. (toggled and "ON" or "OFF") .. "]"
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 75)
+    toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleBtn.Font = Enum.Font.Gotham
+    toggleBtn.TextSize = 14
+    createCorner(8, toggleBtn)
+    toggleBtn.MouseButton1Click:Connect(function()
+        toggled = not toggled
+        toggleBtn.Text = text .. " [" .. (toggled and "ON" or "OFF") .. "]"
+        pcall(callback, toggled)
+    end)
+end
+
+function tabTable:AddSlider(text, min, max, callback)
+    local value = min
+    local holder = Instance.new("Frame", page)
+    holder.Size = UDim2.new(1, -10, 0, 35)
+    holder.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    createCorner(8, holder)
+
+    local sliderLabel = Instance.new("TextLabel", holder)
+    sliderLabel.Size = UDim2.new(1, -10, 0, 20)
+    sliderLabel.Position = UDim2.new(0, 5, 0, 0)
+    sliderLabel.BackgroundTransparency = 1
+    sliderLabel.Font = Enum.Font.Gotham
+    sliderLabel.TextSize = 13
+    sliderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    sliderLabel.Text = text .. ": " .. tostring(value)
+
+    local slider = Instance.new("TextButton", holder)
+    slider.Size = UDim2.new(1, -10, 0, 10)
+    slider.Position = UDim2.new(0, 5, 0, 22)
+    slider.BackgroundColor3 = Color3.fromRGB(80, 80, 120)
+    slider.TextTransparency = 1
+    createCorner(4, slider)
+
+    slider.MouseButton1Down:Connect(function()
+        local moveConn
+        moveConn = UserInputService.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                local rel = input.Position.X - slider.AbsolutePosition.X
+                local percent = math.clamp(rel / slider.AbsoluteSize.X, 0, 1)
+                value = math.floor((max - min) * percent + min)
+                sliderLabel.Text = text .. ": " .. tostring(value)
+                pcall(callback, value)
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                moveConn:Disconnect()
+            end
+        end)
+    end)
+end
+
+function tabTable:AddTextbox(text, callback)
+    local box = Instance.new("TextBox", page)
+    box.Size = UDim2.new(1, -10, 0, 30)
+    box.PlaceholderText = text
+    box.Font = Enum.Font.Gotham
+    box.TextSize = 14
+    box.TextColor3 = Color3.fromRGB(255, 255, 255)
+    box.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    createCorner(8, box)
+    box.FocusLost:Connect(function()
+        pcall(callback, box.Text)
+    end)
+end
+
+function tabTable:AddDropdown(text, items, callback)
+    local dropdown = Instance.new("TextButton", page)
+    dropdown.Size = UDim2.new(1, -10, 0, 30)
+    dropdown.Text = text
+    dropdown.Font = Enum.Font.Gotham
+    dropdown.TextSize = 14
+    dropdown.BackgroundColor3 = Color3.fromRGB(70, 70, 90)
+    dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+    createCorner(8, dropdown)
+
+    local open = false
+    local dropdownList = Instance.new("Frame", page)
+    dropdownList.Size = UDim2.new(1, -10, 0, #items * 28)
+    dropdownList.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    dropdownList.Visible = false
+    createCorner(6, dropdownList)
+
+    local listLayout = Instance.new("UIListLayout", dropdownList)
+    listLayout.Padding = UDim.new(0, 2)
+
+    for _, item in pairs(items) do
+        local option = Instance.new("TextButton", dropdownList)
+        option.Size = UDim2.new(1, 0, 0, 25)
+        option.Text = item
+        option.Font = Enum.Font.Gotham
+        option.TextSize = 13
+        option.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
+        option.TextColor3 = Color3.fromRGB(255, 255, 255)
+        createCorner(4, option)
+        option.MouseButton1Click:Connect(function()
+            dropdown.Text = text .. ": " .. item
+            dropdownList.Visible = false
+            open = false
+            pcall(callback, item)
+        end)
+    end
+
+    dropdown.MouseButton1Click:Connect(function()
+        open = not open
+        dropdownList.Visible = open
+    end)
+end
+
+return tabTable
+
+end
+
+return library
+
