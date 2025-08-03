@@ -1,0 +1,107 @@
+-- LocalScript trong StarterPlayerScripts
+
+-- XÓA GUI CŨ (nếu có)
+if game:GetService("CoreGui"):FindFirstChild("IntroGui") then
+    game:GetService("CoreGui").IntroGui:Destroy()
+end
+
+-- CHỐNG TRÙNG BOOST SPEED
+if _G.BoostSpeedScriptLoaded then return end
+_G.BoostSpeedScriptLoaded = true
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+
+-- GUI
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "IntroGui"
+gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
+
+-- NỀN
+local bg = Instance.new("ImageLabel", gui)
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundTransparency = 0.6
+bg.Image = "rbxassetid://138057999099280"
+bg.ImageTransparency = 0.3
+
+-- Hiệu ứng mờ nền (chữ không mờ)
+local blur = Instance.new("BlurEffect", game.Lighting)
+blur.Size = 12
+
+-- LOGO
+local logo = Instance.new("ImageLabel", gui)
+logo.Size = UDim2.new(0, 100, 0, 100)
+logo.Position = UDim2.new(0.5, -50, 0.4, -180)
+logo.BackgroundTransparency = 1
+logo.Image = "rbxassetid://138057999099280"
+logo.ImageTransparency = 0
+logo.ScaleType = Enum.ScaleType.Fit
+
+-- CHỮ GHÉP MẢNH: KHA HUB
+local fullText = "KHA HUB"
+local textHolder = Instance.new("Frame", gui)
+textHolder.BackgroundTransparency = 1
+textHolder.Size = UDim2.new(1, 0, 0, 100)
+textHolder.Position = UDim2.new(0.5, -150, 0.5, -50)
+
+-- Font phối màu gradient
+local function createLetter(char, i)
+	local label = Instance.new("TextLabel", textHolder)
+	label.Text = char
+	label.Size = UDim2.new(0, 40, 0, 60)
+	label.Position = UDim2.new(0, (i - 1) * 45, 0, 0)
+	label.BackgroundTransparency = 1
+	label.TextScaled = true
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.fromHSV(i / #fullText, 0.9, 1)
+	label.TextTransparency = 1
+	
+	local tween = TweenService:Create(label, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, (i * 0.1)), {
+		TextTransparency = 0
+	})
+	tween:Play()
+end
+
+for i = 1, #fullText do
+	createLetter(fullText:sub(i, i), i)
+end
+
+-- TEXT "ĐANG KIỂM TRA..."
+local checkingText = Instance.new("TextLabel", gui)
+checkingText.Size = UDim2.new(1, 0, 0, 50)
+checkingText.Position = UDim2.new(0, 0, 0.65, 0)
+checkingText.BackgroundTransparency = 1
+checkingText.Text = "ĐANG KIỂM TRA..."
+checkingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+checkingText.TextScaled = true
+checkingText.Font = Enum.Font.Gotham
+checkingText.TextTransparency = 1
+
+TweenService:Create(checkingText, TweenInfo.new(1), {TextTransparency = 0}):Play()
+
+-- HIỆU ỨNG ÁNH SÁNG (nhấp nháy chữ nhẹ)
+task.spawn(function()
+	while gui and gui.Parent do
+		for _, child in ipairs(textHolder:GetChildren()) do
+			if child:IsA("TextLabel") then
+				child.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 0.9, 1)
+			end
+		end
+		task.wait(0.1)
+	end
+end)
+
+-- LOAD SCRIPT CHÍNH SAU 2 GIÂY
+task.delay(2, function()
+	if gui then
+		gui:Destroy()
+	end
+	if blur then
+		blur:Destroy()
+	end
+
+	-- CHẠY SCRIPT CHÍNH Ở ĐÂY
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Nguyennguyenquockha/1/refs/heads/main/boost%20speed_script.txt"))()
+end)
