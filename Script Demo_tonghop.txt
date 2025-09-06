@@ -92,22 +92,6 @@ local SectionDR = TabDR:Section({ Title = "tất cả script Dead Rails có key 
 local SectionBF = TabBF:Section({ Title = "tất cả script Blox Fruit có key và no key", TextXAlignment = "Left", TextSize = 16, })
 local SectionM = TabM:Section({ Title = "Những script hỗ trợ khác", TextXAlignment = "Left", TextSize = 18, })
 
-local Paragraph = TabBF:Paragraph({
-    Title = "Thông báo",
-    Desc = "Vì chx thêm xong nên sẽ ít script",
-    Color = "Gray",
-    Image = "Roblox",
-    ImageSize = 5,
-    Locked = false,
-    Buttons = {
-        {
-            Icon = "badge",
-            Title = "Ok!",
-            Callback = function() print("1 Button") end,
-        }
-    }
-})
-
 --Grow a gardeb tab--
 local Button = TabGag:Button({
     Title = "Speed Hub",
@@ -595,14 +579,6 @@ local Button = TabM:Button({
     end
 })
 
--- Popup thông báo
-WindUI:Notify({
-    Title = "Kha Hub",
-    Content = "Script đã sẵn sàng!",
-    Duration = 3,
-    Icon = "sparkles",
-})
-
 --Blox fruit
 local Button = TabBF:Button({
     Title = "Min gaming Hub",
@@ -647,6 +623,22 @@ local Button = TabBF:Button({
             Duration = 2
         })
     end
+})
+
+-- Popup thông báo
+WindUI:Notify({
+    Title = "Kha Hub",
+    Content = "Script đã sẵn sàng!",
+    Duration = 3,
+    Icon = "sparkles",
+})
+
+-- Popup thông báo
+WindUI:Notify({
+    Title = "Thông báo",
+    Content = "Tab Blox fruit chưa làm xong nên sẽ có sau",
+    Duration = 3,
+    Icon = "bell",
 })
 
 local Players = game:GetService("Players")
