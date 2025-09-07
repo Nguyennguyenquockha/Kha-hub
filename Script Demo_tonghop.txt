@@ -20,11 +20,19 @@ local Window = WindUI:CreateWindow({
    Background = "rbxassetid://13630200065", 
 })
 
+User = {
+        Enabled = true,
+        Anonymous = true,
+        Callback = function()
+            print("clicked")
+        end,
+    },
+
 Window:EditOpenButton({
     Title = "Mở script - Kha Hub",
     Icon = "monitor", -- Lucide icon
-    CornerRadius = UDim.new(0, 10),
-    StrokeThickness = 2,
+    CornerRadius = UDim.new(0, 8),
+    StrokeThickness = 3,
     ColorSequence.new(
     Color3.fromHex("FF9A9E"),
     Color3.fromHex("FAD0C4")
@@ -244,8 +252,8 @@ local Button = TabGag:Button({
 })
 
 local Button = TabGag:Button({
-    Title = "Thunder Hub (mới thêm)",
-    Desc = "Get key",
+    Title = "Thunder Hub",
+    Desc = "Get key (script mới thêm vào) ",
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/ThundarZ/Welcome/main/Main/GaG/Main.lua"))()
@@ -260,7 +268,7 @@ local Button = TabGag:Button({
 
 local Button = TabGag:Button({
     Title = "UB Hub",
-    Desc = "No key",
+    Desc = "No key (script mới thêm vào) ",
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://gitlab.com/r_soft/main/-/raw/main/LoadUB.lua", true))()
@@ -625,6 +633,131 @@ local Button = TabBF:Button({
     end
 })
 
+local Button = TabBF:Button({
+    Title = "Banana cat Hub",
+    Desc = "No key - Bản free",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/MaruHub"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "AndepzaiV2 Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/85e904ae1ff30824c1aa007fc7324f8f.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Astral Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_25.html"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Vxeze Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "W azure Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    getgenv().Team = "Pirates"
+   getgenv().FixCrash = false -- Turn it On For Hopping Server, Improve Performance But Silent Aim On Mob And Player
+   getgenv().FixCrash2 = false -- Turn it On For Hopping Server, Improve Performance But Will Remove Speed Changer
+   loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "TEDDY Hub",
+    Desc = "No key (Script mới thêm vào) ",
+    Locked = false,
+    Callback = function()
+    repeat task.wait() until game:IsLoaded() and game:GetService("Players") and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild("PlayerGui")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TEDDYHUB-FREEMIUM"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = " DatTHG V3 Hub",
+    Desc = "No key (script mới thêm vào) ",
+    Locked = false,
+    Callback = function()
+    getgenv().Team = "Marines"
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/DatThg/refs/heads/main/DatThgV3Eng"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Blue X Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
 -- Popup thông báo
 WindUI:Notify({
     Title = "Kha Hub",
@@ -637,7 +770,7 @@ WindUI:Notify({
 WindUI:Notify({
     Title = "Thông báo",
     Content = "Tab Blox fruit chưa làm xong nên sẽ có sau",
-    Duration = 3,
+    Duration = 25,
     Icon = "bell",
 })
 
