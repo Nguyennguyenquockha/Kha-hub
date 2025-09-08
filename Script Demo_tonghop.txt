@@ -23,7 +23,7 @@ local Window = WindUI:CreateWindow({
 Window:EditOpenButton({
     Title = "Mở script - Kha Hub",
     Icon = "monitor", -- Lucide icon
-    CornerRadius = UDim.new(0, 8),
+    CornerRadius = UDim.new(0, 6.5),
     StrokeThickness = 3,
     ColorSequence.new(
     Color3.fromHex("FF9A9E"),
@@ -87,14 +87,18 @@ local TabDR = Main:Tab({ Title = "Dead rails", Icon = "train-track" })
 local TabBF = Main:Tab({ Title = "Blox Fruit", Icon = "timer" })
 local TabSAB = Main:Tab({ Title = "Steal a brainrot", Icon = "brain" })
 local TabM = OT:Tab({ Title = "Những thứ khác", Icon = "ellipsis" })
+local TabSB = Main:Tab({ Title = "Slap battle", Icon = "code" })
+local TabInk = Main:Tab({ Title = "Ink game", Icon = "code" })
 
 --Các section Tab
 local SectionGaG = TabGag:Section({ Title = "tất cả script Grow a garden có key và no key", TextXAlignment = "Left", TextSize = 16, })
 local SectionDR = TabDR:Section({ Title = "tất cả script Dead Rails có key và no key", TextXAlignment = "Left", TextSize = 16, })
 local SectionBF = TabBF:Section({ Title = "tất cả script Blox Fruit có key và no key", TextXAlignment = "Left", TextSize = 16, })
-local SectionM = TabM:Section({ Title = "Những script hỗ trợ khác", TextXAlignment = "Left", TextSize = 18, })
+local SectionM = TabM:Section({ Title = "Những script hỗ trợ khác", TextXAlignment = "Left", TextSize = 17, })
 local SectionA = TabA:Section({ Title = "Tất cả script 99 ngày trong rừng có key và no key", TextXAlignment = "Left", TextSize = 14, })
 local SectionB = TabSAB:Section({ Title = "Tất cả script Steal a brainrot có key và no key", TextXAlignment = "Left", TextSize = 15, })
+local SectionI = TabInk:Section({ Title = "Tất cả script Ink game có key và no key", TextXAlignment = "Left", TextSize = 17, })
+local SectionSB = TabSB:Section({ Title = "Tất cả script Slap battle có key và no key", TextXAlignment = "Left", TextSize = 16, })
 
 --Grow a gardeb tab--
 local Button = TabGag:Button({
@@ -644,6 +648,51 @@ local Button = TabBF:Button({
 })
 
 local Button = TabBF:Button({
+    Title = "Quantum Onyx Project",
+    Desc = "No key (vừa mới thêm vào) ",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Xeter Hub V3",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://pastefy.app/tKj6eONN/raw", true))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "volcano Hub",
+    Desc = "No key (vừa mới thêm vào) ",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/indexeduu/BF-NewVer/refs/heads/main/V3New.lua'))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
     Title = "Muxus Hub",
     Desc = "No key",
     Locked = false,
@@ -753,12 +802,42 @@ local Button = TabBF:Button({
 })
 
 local Button = TabBF:Button({
+    Title = "Tuấn anh Ios",
+    Desc = "No key ",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AnhTuanDzai-Hub/TuanAnhIOS/refs/heads/main/TuanAnhIOS-Main.Lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
     Title = " DatTHG V3 Hub",
     Desc = "No key (script mới thêm vào) ",
     Locked = false,
     Callback = function()
     getgenv().Team = "Marines"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/DatThg/refs/heads/main/DatThgV3Eng"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Vector Hub",
+    Desc = "No key ",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AAwful/Vector_Hub/0/v2"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -966,12 +1045,87 @@ local Button = TabSAB:Button({
     end
 })
 
+local Button = TabBF:Button({
+    Title = "Cobra Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/705e9a93cc18214fb77ab95686a8dba9.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Strawberry cat Hub",
+    Desc = "Idk🐧🐧🐧",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/shinichi-dz/phucshinsayhi/refs/heads/main/StealABrainrot.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabBF:Button({
+    Title = "Lurk V4 script",
+    Desc = "Idk🐧🐧🐧🐧🐧",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/egor2078f/lurkhackv4/refs/heads/main/main.lua", true))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
 local Button = TabSAB:Button({
     Title = "Lemon hub",
     Desc = "No key ",
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ffdfeadf0af798741806ea404682a938.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabSAB:Button({
+    Title = "Chilli Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabSAB:Button({
+    Title = "Y Hub",
+    Desc = "Idk🐧🐧",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/yue-os/script/refs/heads/main/Y-Hub"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
