@@ -82,9 +82,10 @@ local TabDR = Main:Tab({ Title = "Dead rails", Icon = "train-track" })
 local TabBF = Main:Tab({ Title = "Blox Fruit", Icon = "timer" })
 local TabSAB = Main:Tab({ Title = "Steal a brainrot", Icon = "brain" })
 local TabM = OT:Tab({ Title = "Những thứ khác", Icon = "ellipsis" })
+local TabLo = OT:Tab({ Title = "Local Script", Icon = "code" })
 local TabSB = Main:Tab({ Title = "Slap battle", Icon = "hand" })
 local TabInk = Main:Tab({ Title = "Ink game", Icon = "gamepad-2" })
-local TabF = Main:Tab({ Title = "Forsaken", Icon = "code-xml" })
+local TabF = Main:Tab({ Title = "Forsaken", Icon = "sword" })
 
 --Các section Tab
 local SectionGaG = TabGag:Section({ Title = "tất cả script Grow a garden có key và no key", TextXAlignment = "Left", TextSize = 16, })
@@ -1245,6 +1246,97 @@ local Button = TabSB:Button({
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Giangplay/Slap_Battles/main/Slap_Battles.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+--Forsaken
+local Button = TabF:Button({
+    Title = "Forsaken Script",
+    Desc = "No key (Ko bt tên hub🐧)",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/MaruHub"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabF:Button({
+    Title = "Chu Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/ChuScriptsOfficial/ChuHUB/main/Loader"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabF:Button({
+    Title = "Rintaa script forsaken",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/forsakenloader.github.io/refs/heads/main/RINGTABUBLIK.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabF:Button({
+    Title = "NXP Hub V2",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/fuckg1thub/NeptX/refs/heads/main/NeptZ/Forsaken/source.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabF:Button({
+    Title = "Hutao Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/hdksakst-ship-it/Hutao-Hub-Omega-X/refs/heads/main/Forsaken-V4.txt"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabF:Button({
+    Title = "Saryn Hub",
+    Desc = "No key - Bản Beta chx full",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Saiky988/Saryn-Hub/refs/heads/main/Saryn%Hub%Beta.lua'))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
