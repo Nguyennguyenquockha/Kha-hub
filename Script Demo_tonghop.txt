@@ -41,7 +41,7 @@ Window:Tag({
 
 local TimeTag = Window:Tag({
     Title = "--:--",
-    Radius = 4,
+    Radius = 5,
     --Color = Color3.fromHex("#000000"),
     Color = WindUI:Gradient({
         ["0"]   = { Color = Color3.fromHex("#FF0F7B"), Transparency = 0 },
@@ -82,7 +82,7 @@ local TabDR = Main:Tab({ Title = "Dead rails", Icon = "train-track" })
 local TabBF = Main:Tab({ Title = "Blox Fruit", Icon = "timer" })
 local TabSAB = Main:Tab({ Title = "Steal a brainrot", Icon = "brain" })
 local TabM = OT:Tab({ Title = "Những thứ khác", Icon = "ellipsis" })
-local TabLo = OT:Tab({ Title = "Local Script", Icon = "code" })
+local TabLo = OT:Tab({ Title = "Update", Icon = "scroll-text" })
 local TabSB = Main:Tab({ Title = "Slap battle", Icon = "hand" })
 local TabInk = Main:Tab({ Title = "Ink game", Icon = "gamepad-2" })
 local TabF = Main:Tab({ Title = "Forsaken", Icon = "sword" })
@@ -1347,247 +1347,27 @@ local Button = TabF:Button({
     end
 })
 
---Local script
-local InfJumpToggle = TabLo:Toggle({
-    Title = "Infinite Jump",
-    Desc = "Bật/Tắt nhảy vô hạn",
-    Icon = "thumbs-up",
-    Type = "Checkbox",
-    Default = false,
-    Callback = function(state) 
-        if state then
-            -- bật inf jump
-            _G.InfJump = true
-            game:GetService("UserInputService").JumpRequest:Connect(function()
-                if _G.InfJump then
-                    local player = game.Players.LocalPlayer
-                    if player and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                        player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
-                    end
-                end
-            end)
-            WindUI:Notify({
-                Title = "Thông báo",
-                Content = "Infinite Jump đã bật!",
-                Duration = 1
-            })
-        else
-            -- tắt inf jump
-            _G.InfJump = false
-            WindUI:Notify({
-                Title = "Thông báo",
-                Content = "Infinite Jump đã tắt!",
-                Duration = 1
-            })
-        end
-    end
+--Updated
+local Paragraph = TabLo:Paragraph({
+    Title = "Update 5.01 - The big update",
+    Desc = "Đổi Ui Library tốt nhất,đã loại bỏ những bản ko còn hoạt động, thêm 1 tab forsaken, thêm 1 ít tính năng cho các tab game. ",
+    Color = "White",
+    Image = "",
+    ImageSize = 10,
+    Thumbnail = "",
+    ThumbnailSize = 5,
+    Locked = false
 })
 
-local SpeedSlider = TabLo:Slider({
-    Title = "Speed",
-    Step = 1,
-    Value = {
-        Min = 16,
-        Max = 120,
-        Default = 70, -- tốc độ mặc định
-    },
-    Callback = function(value)
-        -- thay đổi tốc độ player
-        local player = game.Players.LocalPlayer
-        if player and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-            player.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = value
-        end
-    end
-})
-
--- ✅ Reset Speed Button
-local ResetButton = TabLo:Button({
-    Title = "Reset speed",
-    Desc = "Click để reset",
-    Locked = false,
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        if player and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-            player.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = 16 -- mặc định Roblox
-        end
-        -- reset lại slider UI luôn
-        SpeedSlider:Set(70)
-
-        WindUI:Notify({
-            Title = "Thông báo",
-            Content = "Reset về tốc độ bình thường thành công!",
-            Duration = 2
-        })
-    end
-})
-
--- ✅ Cập nhật ESP để không mất khi player respawn
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-
-local ESP = {
-    Enabled = false,
-    Connections = {},
-    ESPItems = {} -- [player] = {billboard, highlight, updateConn}
-}
-
-local function removeESPForPlayer(player)
-    local item = ESP.ESPItems[player]
-    if not item then return end
-    if item.updateConn then item.updateConn:Disconnect() end
-    if item.billboard then item.billboard:Destroy() end
-    if item.highlight then item.highlight:Destroy() end
-    ESP.ESPItems[player] = nil
-end
-
-local function createESP(player, character)
-    local hrp = character:WaitForChild("HumanoidRootPart", 5)
-    local humanoid = character:WaitForChild("Humanoid", 5)
-    if not hrp or not humanoid then return end
-
-    -- Billboard GUI
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "KhaESP"
-    billboard.Adornee = hrp
-    billboard.Size = UDim2.new(0, 180, 0, 50)
-    billboard.StudsOffset = Vector3.new(0, 2.4, 0)
-    billboard.AlwaysOnTop = true
-    billboard.Parent = LocalPlayer:WaitForChild("PlayerGui")
-
-    local nameLabel = Instance.new("TextLabel", billboard)
-    nameLabel.BackgroundTransparency = 1
-    nameLabel.Size = UDim2.new(1, 0, 0.6, 0)
-    nameLabel.Position = UDim2.new(0, 0, 0, 0)
-    nameLabel.Font = Enum.Font.SourceSansSemibold
-    nameLabel.TextSize = 14
-    nameLabel.TextColor3 = Color3.new(1, 1, 1)
-    nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
-    nameLabel.TextStrokeTransparency = 0
-    nameLabel.Text = player.Name
-
-    local infoLabel = Instance.new("TextLabel", billboard)
-    infoLabel.BackgroundTransparency = 1
-    infoLabel.Size = UDim2.new(1, 0, 0.4, 0)
-    infoLabel.Position = UDim2.new(0, 0, 0.6, 0)
-    infoLabel.Font = Enum.Font.SourceSans
-    infoLabel.TextSize = 13
-    infoLabel.TextColor3 = Color3.new(1, 1, 1)
-    infoLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
-    infoLabel.TextStrokeTransparency = 0
-    infoLabel.Text = "HP: 0 • 0 studs"
-
-    -- Highlight
-    local highlight = Instance.new("Highlight")
-    highlight.FillTransparency = 1
-    highlight.OutlineColor = Color3.new(1, 1, 1)
-    highlight.OutlineTransparency = 0.4
-    highlight.Parent = character
-
-    -- update loop
-    local conn = RunService.Heartbeat:Connect(function()
-        if not ESP.Enabled then return end
-        if not character.Parent then return end
-
-        local lpHRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        local dist = 0
-        if lpHRP and hrp then
-            dist = math.floor((hrp.Position - lpHRP.Position).Magnitude)
-        end
-        local hp = math.floor(humanoid and humanoid.Health or 0)
-        infoLabel.Text = "HP: " .. tostring(hp) .. " • " .. tostring(dist) .. " studs"
-    end)
-
-    ESP.ESPItems[player] = {billboard = billboard, highlight = highlight, updateConn = conn}
-end
-
-local function onCharacterAdded(player, character)
-    if ESP.Enabled then
-        removeESPForPlayer(player)
-        createESP(player, character)
-    end
-end
-
-local function onPlayerAdded(player)
-    player.CharacterAdded:Connect(function(char)
-        onCharacterAdded(player, char)
-    end)
-    if player.Character then
-        onCharacterAdded(player, player.Character)
-    end
-end
-
--- WindUI Toggle
-local ESPToggle = TabLo:Toggle({
-    Title = "ESP Players",
-    Desc = "Hiển thị tên, HP và distance (studs).",
-    Icon = "eye",
-    Type = "Checkbox",
-    Default = false,
-    Callback = function(state)
-        ESP.Enabled = state
-        if state then
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer then
-                    onPlayerAdded(p)
-                end
-            end
-            Players.PlayerAdded:Connect(onPlayerAdded)
-            Players.PlayerRemoving:Connect(removeESPForPlayer)
-            WindUI:Notify({Title="Thông báo", Content="ESP bật", Duration=2})
-        else
-            for plr, _ in pairs(ESP.ESPItems) do
-                removeESPForPlayer(plr)
-            end
-            ESP.ESPItems = {}
-            WindUI:Notify({Title="Thông báo", Content="ESP tắt", Duration=2})
-        end
-    end
-})
-
--- ✅ Noclip Toggle
-local NoclipToggle = TabLo:Toggle({
-    Title = "Noclip",
-    Desc = "Đi xuyên tường",
-    Icon = "bird",
-    Type = "Checkbox",
-    Default = false,
-    Callback = function(state)
-        local player = game.Players.LocalPlayer
-        local RunService = game:GetService("RunService")
-
-        if state then
-            _G.Noclip = true
-            -- kết nối Heartbeat loop
-            _G.NoclipConnection = RunService.Stepped:Connect(function()
-                if _G.Noclip and player.Character then
-                    for _, part in pairs(player.Character:GetDescendants()) do
-                        if part:IsA("BasePart") and part.CanCollide then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-            WindUI:Notify({
-                Title = "Thông báo",
-                Content = "Noclip đã bật!",
-                Duration = 2
-            })
-        else
-            _G.Noclip = false
-            -- ngắt kết nối loop để đỡ lag
-            if _G.NoclipConnection then
-                _G.NoclipConnection:Disconnect()
-                _G.NoclipConnection = nil
-            end
-            WindUI:Notify({
-                Title = "Thông báo",
-                Content = "Noclip đã tắt!",
-                Duration = 2
-            })
-        end
-    end
+local Paragraph = TabLo:Paragraph({
+    Title = "Update 6 - Coming soon",
+    Desc = "Coming soon...",
+    Color = "Blue",
+    Image = "",
+    ImageSize = 10,
+    Thumbnail = "",
+    ThumbnailSize = 5,
+    Locked = false
 })
 
 -- Popup thông báo
