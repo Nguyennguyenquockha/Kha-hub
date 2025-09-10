@@ -1,4 +1,3 @@
--- ✅ Load WindUI (bản mới nhất, theo docs)
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
@@ -8,7 +7,7 @@ local Window = WindUI:CreateWindow({
     Folder = "KhasuperHub",
     
     -- ↓ This all is Optional. You can remove it.
-    Size = UDim2.fromOffset(442, 352),
+    Size = UDim2.fromOffset(442, 360),
     Transparent = true,
     Theme = "Dark",
     Resizable = false,
@@ -35,7 +34,7 @@ Window:EditOpenButton({
 })
 
 Window:Tag({
-    Title = "5.0.1",
+    Title = "6.0",
     Color = Color3.fromHex("#CC99FF")
 })
 
@@ -86,7 +85,7 @@ local TabLo = OT:Tab({ Title = "Update", Icon = "scroll-text" })
 local TabSB = Main:Tab({ Title = "Slap battle", Icon = "hand" })
 local TabInk = Main:Tab({ Title = "Ink game", Icon = "gamepad-2" })
 local TabF = Main:Tab({ Title = "Forsaken", Icon = "sword" })
-local TabD = Main:Tab({ Title = "Doors", Icon = "code" })
+local TabD = Main:Tab({ Title = "Doors", Icon = "door" })
 
 --Các section Tab
 local SectionGaG = TabGag:Section({ Title = "tất cả script Grow a garden có key và no key", TextXAlignment = "Left", TextSize = 16, })
@@ -98,6 +97,7 @@ local SectionB = TabSAB:Section({ Title = "Tất cả script Steal a brainrot c�
 local SectionI = TabInk:Section({ Title = "Tất cả script Ink game có key và no key", TextXAlignment = "Left", TextSize = 17, })
 local SectionSB = TabSB:Section({ Title = "Tất cả script Slap battle có key và no key", TextXAlignment = "Left", TextSize = 16, })
 local SectionF = TabF:Section({ Title = "Tất cả script Forsaken có key và no key", TextXAlignment = "Left", TextSize = 17, })
+local SectionD = TabD:Section({ Title = "Tất cả script Doors có key và no key", TextXAlignment = "Left", TextSize = 17, })
 
 --Grow a gardeb tab--
 local Button = TabGag:Button({
@@ -121,21 +121,6 @@ local Button = TabGag:Button({
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()
-        print("clicked")
-        WindUI:Notify({
-            Title = "Thông báo",
-            Content = "bấm nút thành công! ",
-            Duration = 2
-        })
-    end
-})
-
-local Button = TabGag:Button({
-    Title = "Kura Hub",
-    Desc = "Get key",
-    Locked = false,
-    Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/checkurasshole/Script/refs/heads/main/IQ'))();
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -225,7 +210,7 @@ local Button = TabGag:Button({
     Desc = "Get key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/LimitHub/refs/heads/main/LimitHub_Luarmor_E.lua')))()
+    loadstring(game:HttpGet(("https://raw.githubusercontent.com/FakeModz/LimitHub/refs/heads/main/LimitHub_Luarmor_E.lua")))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -286,7 +271,7 @@ local Button = TabDR:Button({
     Desc = "Get key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/hungquan99/SkullHub/main/loader.lua'))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/hungquan99/SkullHub/main/loader.lua"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -346,7 +331,7 @@ local Button = TabDR:Button({
     Desc = "No key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -391,7 +376,7 @@ local Button = TabDR:Button({
     Desc = "Get key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet('https://lunor.dev/loader'))()
+    loadstring(game:HttpGet("https://lunor.dev/loader"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -452,7 +437,7 @@ local Button = TabM:Button({
     Desc = "No key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+    loadstring(game:HttpGet(("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"),true))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -790,7 +775,7 @@ local Button = TabBF:Button({
     Locked = false,
     Callback = function()
     repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TeddyHub.lua"))()    
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TeddyHub.lua"))() 
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -1106,7 +1091,7 @@ local Button = TabSAB:Button({
 
 local Button = TabSAB:Button({
     Title = "PusarX Hub",
-    Desc = "Get key ",
+    Desc = "Get key",
     Locked = false,
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Estevansit0/KJJK/refs/heads/main/PusarX-loader.lua"))() 
@@ -1170,7 +1155,7 @@ local Button = TabInk:Button({
     Desc = "No key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet("https://rawscripts.net /raw/RELEASE-Ink-Game-Revive-Hub-44004"))()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/RELEASE-Ink-Game-Revive-Hub-44004"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -1317,28 +1302,13 @@ local Button = TabF:Button({
     end
 })
 
-local Button = TabF:Button({
-    Title = "Saryn Hub",
-    Desc = "No key - Bản Beta chx full",
-    Locked = false,
-    Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Saiky988/Saryn-Hub/refs/heads/main/Saryn%Hub%Beta.lua'))()
-        print("clicked")
-        WindUI:Notify({
-            Title = "Thông báo",
-            Content = "bấm nút thành công! ",
-            Duration = 2
-        })
-    end
-})
-
 --doors
 local Button = TabD:Button({
     Title = "Nullfire Hub",
     Desc = "No key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/NuIlFire/NullFire/main/loader.lua'))() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NuIlFire/NullFire/main/loader.lua"))() 
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -1353,7 +1323,7 @@ local Button = TabD:Button({
     Desc = "No key",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/TheHunterSolo1/Scripts/refs/heads/main/Protected_2809220311826785.lua.txt'))() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TheHunterSolo1/Scripts/refs/heads/main/Protected_2809220311826785.lua.txt"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -1410,19 +1380,8 @@ local Button = TabD:Button({
 
 --Updated
 local Paragraph = TabLo:Paragraph({
-    Title = "Update 5.01 - The big update",
-    Desc = "Đổi Ui Library tốt nhất,đã loại bỏ những bản ko còn hoạt động, thêm 1 tab forsaken, thêm 1 ít tính năng cho các tab game. ",
-    Color = "White",
-    Image = "",
-    ImageSize = 10,
-    Thumbnail = "",
-    ThumbnailSize = 5,
-    Locked = false
-})
-
-local Paragraph = TabLo:Paragraph({
-    Title = "Update 6.0 - Doors👁 Tab Update",
-    Desc = "Thêm 1 tab doors và tính năng cho doors, sửa lại kích thước gui",
+    Title = "Update 6.0- Doors tab update",
+    Desc = "Fix lỗi ko load đc script.Đổi kích thước gui và đổi hình nền, thêm tab doors và tính năng",
     Color = "White",
     Image = "",
     ImageSize = 10,
