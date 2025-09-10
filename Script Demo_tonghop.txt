@@ -8,7 +8,7 @@ local Window = WindUI:CreateWindow({
     Folder = "KhasuperHub",
     
     -- ↓ This all is Optional. You can remove it.
-    Size = UDim2.fromOffset(447, 390),
+    Size = UDim2.fromOffset(442, 352),
     Transparent = true,
     Theme = "Dark",
     Resizable = false,
@@ -17,7 +17,7 @@ local Window = WindUI:CreateWindow({
     HideSearchBar = false,
     ScrollBarEnabled = true,
 
-   Background = "rbxassetid://13630200065", 
+   Background = "rbxassetid://118963109518789", 
 })
 
 Window:EditOpenButton({
@@ -722,11 +722,11 @@ local Button = TabBF:Button({
 })
 
 local Button = TabBF:Button({
-    Title = "AndepzaiV2 Hub",
-    Desc = "No key",
+    Title = "Zis Roblox script",
+    Desc = "No key ",
     Locked = false,
     Callback = function()
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/85e904ae1ff30824c1aa007fc7324f8f.lua"))()
+    loadstring(game:HttpGet("https://github.com/LuaCrack/Zis/raw/refs/heads/main/ZisUp27Eng"))()
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -789,23 +789,8 @@ local Button = TabBF:Button({
     Desc = "No key (Script mới thêm vào) ",
     Locked = false,
     Callback = function()
-    repeat task.wait() until game:IsLoaded() and game:GetService("Players") and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild("PlayerGui")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TEDDYHUB-FREEMIUM"))()
-        print("clicked")
-        WindUI:Notify({
-            Title = "Thông báo",
-            Content = "bấm nút thành công! ",
-            Duration = 2
-        })
-    end
-})
-
-local Button = TabBF:Button({
-    Title = "Tuấn anh Ios",
-    Desc = "No key ",
-    Locked = false,
-    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/AnhTuanDzai-Hub/TuanAnhIOS/refs/heads/main/TuanAnhIOS-Main.Lua"))()
+    repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TeddyHub.lua"))()    
         print("clicked")
         WindUI:Notify({
             Title = "Thông báo",
@@ -1347,6 +1332,82 @@ local Button = TabF:Button({
     end
 })
 
+--doors
+local Button = TabD:Button({
+    Title = "Nullfire Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/NuIlFire/NullFire/main/loader.lua'))() 
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabD:Button({
+    Title = "ProHax V3 Hub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/TheHunterSolo1/Scripts/refs/heads/main/Protected_2809220311826785.lua.txt'))() 
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabD:Button({
+    Title = "Astral Hub",
+    Desc = "Get key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/PlayzlxD0tmatter/AstralHub/refs/heads/main/AstralHub"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabD:Button({
+    Title = "FFJ Hub",
+    Desc = "Get key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/Loader.lua"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
+local Button = TabD:Button({
+    Title = "Blackking and bobHub",
+    Desc = "No key",
+    Locked = false,
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing-obf/main/Doors%20Blackking%20And%20BobHub"))()
+        print("clicked")
+        WindUI:Notify({
+            Title = "Thông báo",
+            Content = "bấm nút thành công! ",
+            Duration = 2
+        })
+    end
+})
+
 --Updated
 local Paragraph = TabLo:Paragraph({
     Title = "Update 5.01 - The big update",
@@ -1360,9 +1421,9 @@ local Paragraph = TabLo:Paragraph({
 })
 
 local Paragraph = TabLo:Paragraph({
-    Title = "Update 6 - Coming soon",
-    Desc = "Coming soon...",
-    Color = "Blue",
+    Title = "Update 6.0 - Doors👁 Tab Update",
+    Desc = "Thêm 1 tab doors và tính năng cho doors, sửa lại kích thước gui",
+    Color = "White",
     Image = "",
     ImageSize = 10,
     Thumbnail = "",
