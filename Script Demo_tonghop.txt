@@ -1381,12 +1381,12 @@ local Button = TabD:Button({
 --Updated
 local Paragraph = TabLo:Paragraph({
     Title = "Update 6.0- Doors tab update",
-    Desc = "Fix lỗi ko load đc script.Đổi kích thước gui và đổi hình nền, thêm tab doors và tính năng",
+    Desc = "Fix lỗi ko load đc script.Đổi kích thước gui và đổi hình nền, thêm tab doors và tính năng, sửa vài thứ cho intro script để nó ổn hơn",
     Color = "White",
     Image = "",
-    ImageSize = 10,
+    ImageSize = 5,
     Thumbnail = "",
-    ThumbnailSize = 5,
+    ThumbnailSize = 3,
     Locked = false
 })
 
