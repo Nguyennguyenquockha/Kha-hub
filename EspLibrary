@@ -1,0 +1,587 @@
+-- ================================
+-- ESP LIBRARY
+-- Tạo ESP cho Players và Objects
+-- ================================
+
+local ESPLib = {}
+
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
+
+-- Storage
+ESPLib.objects = {}
+ESPLib.connections = {}
+
+-- Settings
+ESPLib.settings = {
+    enabled = true,
+    teamCheck = false,
+    
+    -- Features
+    boxes = true,
+    boxFilled = false,
+    names = true,
+    distance = true,
+    health = true,
+    tracers = true,
+    chams = false,
+    
+    -- Colors
+    boxColor = Color3.fromRGB(255, 255, 255),
+    boxFilledColor = Color3.fromRGB(255, 255, 255),
+    boxFilledTransparency = 0.3,
+    nameColor = Color3.fromRGB(255, 255, 255),
+    distanceColor = Color3.fromRGB(200, 200, 200),
+    tracerColor = Color3.fromRGB(255, 255, 255),
+    teamColor = true, -- Sử dụng màu team
+    
+    -- Sizes
+    boxThickness = 2,
+    tracerThickness = 2,
+    textSize = 16,
+    distanceTextSize = 14,
+    
+    -- Limits
+    maxDistance = 1000,
+    
+    -- Tracer position
+    tracerOrigin = "Bottom", -- "Bottom", "Middle", "Top"
+}
+
+-- ================================
+-- CORE FUNCTIONS
+-- ================================
+
+function ESPLib:CreateESP(obj, objType)
+    if self.objects[obj] then return end
+    
+    local esp = {
+        object = obj,
+        type = objType or "Player",
+        drawings = {},
+        connection = nil
+    }
+    
+    -- Box
+    local box = Drawing.new("Square")
+    box.Visible = false
+    box.Color = self.settings.boxColor
+    box.Thickness = self.settings.boxThickness
+    box.Transparency = 1
+    box.Filled = false
+    box.ZIndex = 2
+    esp.drawings.box = box
+    
+    -- Box Filled
+    if self.settings.boxFilled then
+        local boxFilled = Drawing.new("Square")
+        boxFilled.Visible = false
+        boxFilled.Color = self.settings.boxFilledColor
+        boxFilled.Thickness = 1
+        boxFilled.Transparency = self.settings.boxFilledTransparency
+        boxFilled.Filled = true
+        boxFilled.ZIndex = 1
+        esp.drawings.boxFilled = boxFilled
+    end
+    
+    -- Name
+    local name = Drawing.new("Text")
+    name.Visible = false
+    name.Color = self.settings.nameColor
+    name.Size = self.settings.textSize
+    name.Center = true
+    name.Outline = true
+    name.Font = 2
+    name.Transparency = 1
+    name.ZIndex = 3
+    esp.drawings.name = name
+    
+    -- Distance
+    local distance = Drawing.new("Text")
+    distance.Visible = false
+    distance.Color = self.settings.distanceColor
+    distance.Size = self.settings.distanceTextSize
+    distance.Center = true
+    distance.Outline = true
+    distance.Font = 2
+    distance.Transparency = 1
+    distance.ZIndex = 3
+    esp.drawings.distance = distance
+    
+    -- Health Bar Background
+    local healthBg = Drawing.new("Square")
+    healthBg.Visible = false
+    healthBg.Color = Color3.fromRGB(0, 0, 0)
+    healthBg.Thickness = 1
+    healthBg.Transparency = 0.5
+    healthBg.Filled = true
+    healthBg.ZIndex = 1
+    esp.drawings.healthBg = healthBg
+    
+    -- Health Bar
+    local healthBar = Drawing.new("Square")
+    healthBar.Visible = false
+    healthBar.Color = Color3.fromRGB(0, 255, 0)
+    healthBar.Thickness = 1
+    healthBar.Transparency = 1
+    healthBar.Filled = true
+    healthBar.ZIndex = 2
+    esp.drawings.healthBar = healthBar
+    
+    -- Health Outline
+    local healthOutline = Drawing.new("Square")
+    healthOutline.Visible = false
+    healthOutline.Color = Color3.fromRGB(0, 0, 0)
+    healthOutline.Thickness = 1
+    healthOutline.Transparency = 1
+    healthOutline.Filled = false
+    healthOutline.ZIndex = 3
+    esp.drawings.healthOutline = healthOutline
+    
+    -- Tracer
+    local tracer = Drawing.new("Line")
+    tracer.Visible = false
+    tracer.Color = self.settings.tracerColor
+    tracer.Thickness = self.settings.tracerThickness
+    tracer.Transparency = 1
+    tracer.ZIndex = 1
+    esp.drawings.tracer = tracer
+    
+    self.objects[obj] = esp
+    return esp
+end
+
+function ESPLib:RemoveESP(obj)
+    local esp = self.objects[obj]
+    if not esp then return end
+    
+    for _, drawing in pairs(esp.drawings) do
+        drawing:Remove()
+    end
+    
+    if esp.chams then
+        for _, cham in pairs(esp.chams) do
+            cham:Destroy()
+        end
+    end
+    
+    if esp.connection then
+        esp.connection:Disconnect()
+    end
+    
+    self.objects[obj] = nil
+end
+
+function ESPLib:GetColor(obj)
+    if self.settings.teamCheck and self.settings.teamColor then
+        if obj:IsA("Player") then
+            if obj.Team then
+                return obj.TeamColor.Color
+            end
+        end
+    end
+    return self.settings.boxColor
+end
+
+function ESPLib:UpdateESP()
+    if not self.settings.enabled then
+        for _, esp in pairs(self.objects) do
+            for _, drawing in pairs(esp.drawings) do
+                drawing.Visible = false
+            end
+        end
+        return
+    end
+    
+    for obj, esp in pairs(self.objects) do
+        pcall(function()
+            if not obj or not obj.Parent then
+                self:RemoveESP(obj)
+                return
+            end
+            
+            local character, rootPart, humanoid
+            
+            -- Get character parts
+            if esp.type == "Player" then
+                if obj == player then return end
+                
+                -- Team check
+                if self.settings.teamCheck and obj.Team == player.Team then
+                    for _, drawing in pairs(esp.drawings) do
+                        drawing.Visible = false
+                    end
+                    return
+                end
+                
+                character = obj.Character
+                if not character then return end
+                
+                rootPart = character:FindFirstChild("HumanoidRootPart")
+                humanoid = character:FindFirstChild("Humanoid")
+            else
+                if obj:IsA("Model") then
+                    rootPart = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart
+                    humanoid = obj:FindFirstChild("Humanoid")
+                else
+                    rootPart = obj
+                end
+            end
+            
+            if not rootPart then
+                for _, drawing in pairs(esp.drawings) do
+                    drawing.Visible = false
+                end
+                return
+            end
+            
+            -- Check if alive
+            if humanoid and humanoid.Health <= 0 then
+                for _, drawing in pairs(esp.drawings) do
+                    drawing.Visible = false
+                end
+                return
+            end
+            
+            -- Calculate positions
+            local pos, onScreen = camera:WorldToViewportPoint(rootPart.Position)
+            local distance = (camera.CFrame.Position - rootPart.Position).Magnitude
+            
+            if not onScreen or distance > self.settings.maxDistance then
+                for _, drawing in pairs(esp.drawings) do
+                    drawing.Visible = false
+                end
+                return
+            end
+            
+            -- Calculate box dimensions
+            local topPos = camera:WorldToViewportPoint((rootPart.CFrame * CFrame.new(0, 3, 0)).Position)
+            local bottomPos = camera:WorldToViewportPoint((rootPart.CFrame * CFrame.new(0, -3, 0)).Position)
+            local height = math.abs(topPos.Y - bottomPos.Y)
+            local width = height / 2
+            
+            local boxPosition = Vector2.new(pos.X - width / 2, pos.Y - height / 2)
+            local boxSize = Vector2.new(width, height)
+            
+            -- Get color
+            local color = self:GetColor(obj)
+            
+            -- Update Box
+            if esp.drawings.box and self.settings.boxes then
+                esp.drawings.box.Size = boxSize
+                esp.drawings.box.Position = boxPosition
+                esp.drawings.box.Color = color
+                esp.drawings.box.Visible = true
+            else
+                esp.drawings.box.Visible = false
+            end
+            
+            -- Update Box Filled
+            if esp.drawings.boxFilled and self.settings.boxFilled then
+                esp.drawings.boxFilled.Size = boxSize
+                esp.drawings.boxFilled.Position = boxPosition
+                esp.drawings.boxFilled.Color = color
+                esp.drawings.boxFilled.Visible = true
+            elseif esp.drawings.boxFilled then
+                esp.drawings.boxFilled.Visible = false
+            end
+            
+            -- Update Name
+            if esp.drawings.name and self.settings.names then
+                local displayName = esp.type == "Player" and obj.DisplayName or obj.Name
+                esp.drawings.name.Text = displayName
+                esp.drawings.name.Position = Vector2.new(pos.X, boxPosition.Y - 20)
+                esp.drawings.name.Color = color
+                esp.drawings.name.Visible = true
+            else
+                esp.drawings.name.Visible = false
+            end
+            
+            -- Update Distance
+            if esp.drawings.distance and self.settings.distance then
+                esp.drawings.distance.Text = string.format("[%.0f studs]", distance)
+                esp.drawings.distance.Position = Vector2.new(pos.X, boxPosition.Y + boxSize.Y + 5)
+                esp.drawings.distance.Visible = true
+            else
+                esp.drawings.distance.Visible = false
+            end
+            
+            -- Update Health Bar
+            if humanoid and self.settings.health then
+                local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+                local barHeight = height * healthPercent
+                local barWidth = 4
+                local barX = boxPosition.X - barWidth - 5
+                local barY = boxPosition.Y + height - barHeight
+                
+                -- Background
+                if esp.drawings.healthBg then
+                    esp.drawings.healthBg.Size = Vector2.new(barWidth, height)
+                    esp.drawings.healthBg.Position = Vector2.new(barX, boxPosition.Y)
+                    esp.drawings.healthBg.Visible = true
+                end
+                
+                -- Health bar
+                if esp.drawings.healthBar then
+                    esp.drawings.healthBar.Size = Vector2.new(barWidth, barHeight)
+                    esp.drawings.healthBar.Position = Vector2.new(barX, barY)
+                    esp.drawings.healthBar.Color = Color3.fromRGB(
+                        255 * (1 - healthPercent),
+                        255 * healthPercent,
+                        0
+                    )
+                    esp.drawings.healthBar.Visible = true
+                end
+                
+                -- Outline
+                if esp.drawings.healthOutline then
+                    esp.drawings.healthOutline.Size = Vector2.new(barWidth, height)
+                    esp.drawings.healthOutline.Position = Vector2.new(barX, boxPosition.Y)
+                    esp.drawings.healthOutline.Visible = true
+                end
+            else
+                if esp.drawings.healthBg then esp.drawings.healthBg.Visible = false end
+                if esp.drawings.healthBar then esp.drawings.healthBar.Visible = false end
+                if esp.drawings.healthOutline then esp.drawings.healthOutline.Visible = false end
+            end
+            
+            -- Update Tracer
+            if esp.drawings.tracer and self.settings.tracers then
+                local fromY
+                if self.settings.tracerOrigin == "Top" then
+                    fromY = 0
+                elseif self.settings.tracerOrigin == "Middle" then
+                    fromY = camera.ViewportSize.Y / 2
+                else
+                    fromY = camera.ViewportSize.Y
+                end
+                
+                local from = Vector2.new(camera.ViewportSize.X / 2, fromY)
+                local to = Vector2.new(pos.X, pos.Y)
+                
+                esp.drawings.tracer.From = from
+                esp.drawings.tracer.To = to
+                esp.drawings.tracer.Color = color
+                esp.drawings.tracer.Visible = true
+            else
+                esp.drawings.tracer.Visible = false
+            end
+        end)
+    end
+end
+
+-- ================================
+-- CHAMS FUNCTIONS
+-- ================================
+
+function ESPLib:AddChams(obj)
+    local esp = self.objects[obj]
+    if not esp then return end
+    
+    local character
+    if esp.type == "Player" then
+        character = obj.Character
+    else
+        character = obj:IsA("Model") and obj or nil
+    end
+    
+    if not character then return end
+    
+    esp.chams = {}
+    
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            local highlight = Instance.new("Highlight")
+            highlight.Adornee = part
+            highlight.FillColor = self:GetColor(obj)
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 0
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            highlight.Parent = part
+            
+            table.insert(esp.chams, highlight)
+        end
+    end
+end
+
+function ESPLib:RemoveChams(obj)
+    local esp = self.objects[obj]
+    if not esp or not esp.chams then return end
+    
+    for _, cham in pairs(esp.chams) do
+        cham:Destroy()
+    end
+    
+    esp.chams = nil
+end
+
+-- ================================
+-- PUBLIC FUNCTIONS
+-- ================================
+
+function ESPLib:AddPlayer(targetPlayer)
+    if targetPlayer == player then return end
+    self:CreateESP(targetPlayer, "Player")
+    
+    if self.settings.chams then
+        targetPlayer.CharacterAdded:Connect(function()
+            wait(0.1)
+            self:AddChams(targetPlayer)
+        end)
+        
+        if targetPlayer.Character then
+            self:AddChams(targetPlayer)
+        end
+    end
+end
+
+function ESPLib:AddAllPlayers()
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= player then
+            self:AddPlayer(p)
+        end
+    end
+    
+    self.connections.playerAdded = Players.PlayerAdded:Connect(function(p)
+        self:AddPlayer(p)
+    end)
+    
+    self.connections.playerRemoving = Players.PlayerRemoving:Connect(function(p)
+        self:RemoveESP(p)
+    end)
+end
+
+function ESPLib:AddObject(obj, objName)
+    self:CreateESP(obj, objName or "Object")
+    
+    if self.settings.chams then
+        self:AddChams(obj)
+    end
+end
+
+function ESPLib:RemoveAllESP()
+    for obj, _ in pairs(self.objects) do
+        self:RemoveESP(obj)
+    end
+end
+
+function ESPLib:Toggle(state)
+    self.settings.enabled = state
+end
+
+function ESPLib:ToggleBoxes(state)
+    self.settings.boxes = state
+end
+
+function ESPLib:ToggleBoxFilled(state)
+    self.settings.boxFilled = state
+end
+
+function ESPLib:ToggleNames(state)
+    self.settings.names = state
+end
+
+function ESPLib:ToggleDistance(state)
+    self.settings.distance = state
+end
+
+function ESPLib:ToggleHealth(state)
+    self.settings.health = state
+end
+
+function ESPLib:ToggleTracers(state)
+    self.settings.tracers = state
+end
+
+function ESPLib:ToggleChams(state)
+    self.settings.chams = state
+    
+    if state then
+        for obj, esp in pairs(self.objects) do
+            self:AddChams(obj)
+        end
+    else
+        for obj, esp in pairs(self.objects) do
+            self:RemoveChams(obj)
+        end
+    end
+end
+
+function ESPLib:ToggleTeamCheck(state)
+    self.settings.teamCheck = state
+end
+
+function ESPLib:SetMaxDistance(distance)
+    self.settings.maxDistance = distance
+end
+
+function ESPLib:SetTracerOrigin(origin)
+    self.settings.tracerOrigin = origin
+end
+
+function ESPLib:SetColors(settings)
+    if settings.box then self.settings.boxColor = settings.box end
+    if settings.name then self.settings.nameColor = settings.name end
+    if settings.distance then self.settings.distanceColor = settings.distance end
+    if settings.tracer then self.settings.tracerColor = settings.tracer end
+    if settings.boxFilled then self.settings.boxFilledColor = settings.boxFilled end
+end
+
+function ESPLib:SetBoxThickness(thickness)
+    self.settings.boxThickness = thickness
+end
+
+function ESPLib:SetTracerThickness(thickness)
+    self.settings.tracerThickness = thickness
+end
+
+-- ================================
+-- AUTO UPDATE LOOP
+-- ================================
+
+RunService.RenderStepped:Connect(function()
+    ESPLib:UpdateESP()
+end)
+
+-- ================================
+-- EXPORT
+-- ================================
+
+_G.ESPLib = ESPLib
+
+print("=================================")
+print("✅ ESP LIBRARY LOADED!")
+print("=================================")
+print("📖 Access: _G.ESPLib")
+print("")
+print("📌 EXAMPLE USAGE:")
+print("_G.ESPLib:AddAllPlayers()")
+print("_G.ESPLib:Toggle(true)")
+print("_G.ESPLib:ToggleChams(true)")
+print("=================================")
+print("")
+print("🎨 FUNCTIONS:")
+print("• AddPlayer(player)")
+print("• AddAllPlayers()")
+print("• AddObject(object, name)")
+print("• RemoveESP(object)")
+print("• RemoveAllESP()")
+print("• Toggle(true/false)")
+print("• ToggleBoxes(true/false)")
+print("• ToggleNames(true/false)")
+print("• ToggleDistance(true/false)")
+print("• ToggleHealth(true/false)")
+print("• ToggleTracers(true/false)")
+print("• ToggleChams(true/false)")
+print("• ToggleTeamCheck(true/false)")
+print("• SetMaxDistance(number)")
+print("• SetTracerOrigin('Top'/'Middle'/'Bottom')")
+print("=================================")
+
+return ESPLib
