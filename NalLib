@@ -500,108 +500,161 @@ function NalLib:MakeWindow(WindowConfig)
 			end    
 
 			function ElementFunction:AddToggle(ToggleConfig)
-				ToggleConfig = ToggleConfig or {}
-				ToggleConfig.Name = ToggleConfig.Name or "Toggle"
-				ToggleConfig.Default = ToggleConfig.Default or false
-				ToggleConfig.Callback = ToggleConfig.Callback or function() end
-				ToggleConfig.Color = ToggleConfig.Color or Color3.fromRGB(9, 99, 195)
-				ToggleConfig.Flag = ToggleConfig.Flag or nil
-				ToggleConfig.Save = ToggleConfig.Save or false
+	ToggleConfig = ToggleConfig or {}
+	ToggleConfig.Name = ToggleConfig.Name or "Toggle"
+	ToggleConfig.Default = ToggleConfig.Default or false
+	ToggleConfig.Callback = ToggleConfig.Callback or function() end
+	ToggleConfig.Color = ToggleConfig.Color or Color3.fromRGB(0,170,255)
+	ToggleConfig.Style = ToggleConfig.Style or "Toggle" -- Toggle | Checkbox
+	ToggleConfig.Flag = ToggleConfig.Flag
+	ToggleConfig.Save = ToggleConfig.Save or false
 
-				local Toggle = {Value = ToggleConfig.Default, Save = ToggleConfig.Save}
-				local Click = SetProps(MakeElement("Button"), { Size = UDim2.new(1, 0, 1, 0) })
+	local Toggle = {Value = ToggleConfig.Default, Save = ToggleConfig.Save}
+	local Click = SetProps(MakeElement("Button"), {Size = UDim2.new(1,0,1,0)})
 
-                --// NEW STYLE: Toggle Switch (Capsule)
-				local ToggleBox = SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(40,40,40)), {
-					Size = UDim2.new(0, 36, 0, 18),
-					Position = UDim2.new(1, -30, 0.5, 0),
-					AnchorPoint = Vector2.new(0.5, 0.5)
-				}), {
-                    MakeElement("Corner", 1, 0), -- Full Round Corner
-					SetProps(MakeElement("Stroke"), { Color = NalLib.Themes.Default.Stroke, Name = "Stroke", Transparency = 0 }),
-                    -- Inner Knob (Circle)
-					SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(255,255,255)), {
-						Size = UDim2.new(0, 14, 0, 14),
-						AnchorPoint = Vector2.new(0, 0.5),
-						Position = UDim2.new(0, 2, 0.5, 0),
-						Name = "Knob"
-					}), { MakeElement("Corner", 1, 0) })
-				})
+	local ToggleBox
 
-				local ToggleFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), { Size = UDim2.new(1, 0, 0, 38), Parent = ItemParent }), {
-					AddThemeObject(SetProps(MakeElement("Label", ToggleConfig.Name, 15), { Size = UDim2.new(1, -12, 1, 0), Position = UDim2.new(0, 12, 0, 0), Font = Enum.Font.GothamBold, Name = "Content" }), "Text"),
-					AddThemeObject(MakeElement("Stroke"), "Stroke"), ToggleBox, Click
-				}), "Second")
+	-- CHECKBOX STYLE
+	if ToggleConfig.Style == "Checkbox" then
+		ToggleBox = SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(40,40,40)), {
+			Size = UDim2.new(0,18,0,18),
+			Position = UDim2.new(1,-30,0.5,0),
+			AnchorPoint = Vector2.new(0.5,0.5)
+		}), {
+			MakeElement("Corner",0,4),
+			MakeElement("Stroke"),
+			SetProps(MakeElement("Image","rbxassetid://6031094678"),{
+				Name="Check",
+				Size=UDim2.new(1,-4,1,-4),
+				Position=UDim2.new(0,2,0,2),
+				ImageTransparency=1
+			})
+		})
+	else
+		-- SWITCH STYLE
+		ToggleBox = SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(40,40,40)), {
+			Size = UDim2.new(0,36,0,18),
+			Position = UDim2.new(1,-30,0.5,0),
+			AnchorPoint = Vector2.new(0.5,0.5)
+		}), {
+			MakeElement("Corner",1,0),
+			MakeElement("Stroke"),
+			SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(255,255,255)), {
+				Name="Knob",
+				Size=UDim2.new(0,14,0,14),
+				Position=UDim2.new(0,2,0.5,0),
+				AnchorPoint=Vector2.new(0,0.5)
+			}), {MakeElement("Corner",1,0)})
+		})
+	end
 
-				function Toggle:Set(Value)
-					Toggle.Value = Value
-                    -- Animate Switch
-					TweenService:Create(ToggleBox, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Toggle.Value and ToggleConfig.Color or Color3.fromRGB(40,40,40)}):Play()
-                    TweenService:Create(ToggleBox.Knob, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = Toggle.Value and UDim2.new(1, -16, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)}):Play()
-					ToggleConfig.Callback(Toggle.Value)
-				end    
-				Toggle:Set(Toggle.Value)
+	local ToggleFrame = AddThemeObject(SetChildren(SetProps(
+		MakeElement("RoundFrame", Color3.fromRGB(255,255,255), 0, 5),
+		{Size = UDim2.new(1,0,0,36), Parent = ItemParent}
+	), {
+		AddThemeObject(SetProps(MakeElement("Label", ToggleConfig.Name, 15), {
+			Size = UDim2.new(1,-50,1,0),
+			Position = UDim2.new(0,12,0,0),
+			Font = Enum.Font.GothamBold
+		}), "Text"),
+		AddThemeObject(MakeElement("Stroke"), "Stroke"),
+		ToggleBox,
+		Click
+	}), "Second")
 
-				AddConnection(Click.MouseEnter, function() TweenService:Create(ToggleFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(NalLib.Themes[NalLib.SelectedTheme].Second.R * 255 + 3, NalLib.Themes[NalLib.SelectedTheme].Second.G * 255 + 3, NalLib.Themes[NalLib.SelectedTheme].Second.B * 255 + 3)}):Play() end)
-				AddConnection(Click.MouseLeave, function() TweenService:Create(ToggleFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = NalLib.Themes[NalLib.SelectedTheme].Second}):Play() end)
-				AddConnection(Click.MouseButton1Up, function()
-					TweenService:Create(ToggleFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(NalLib.Themes[NalLib.SelectedTheme].Second.R * 255 + 3, NalLib.Themes[NalLib.SelectedTheme].Second.G * 255 + 3, NalLib.Themes[NalLib.SelectedTheme].Second.B * 255 + 3)}):Play()
-					SaveCfg(game.GameId)
-					Toggle:Set(not Toggle.Value)
-				end)
-				AddConnection(Click.MouseButton1Down, function() TweenService:Create(ToggleFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(NalLib.Themes[NalLib.SelectedTheme].Second.R * 255 + 6, NalLib.Themes[NalLib.SelectedTheme].Second.G * 255 + 6, NalLib.Themes[NalLib.SelectedTheme].Second.B * 255 + 6)}):Play() end)
+	function Toggle:Set(Value)
+		Toggle.Value = Value
 
-				if ToggleConfig.Flag then NalLib.Flags[ToggleConfig.Flag] = Toggle end	
-				return Toggle
-			end
+		if ToggleConfig.Style == "Checkbox" then
+			TweenService:Create(ToggleBox.Check, TweenInfo.new(0.25), {
+				ImageTransparency = Value and 0 or 1
+			}):Play()
+		else
+			TweenService:Create(ToggleBox, TweenInfo.new(0.25), {
+				BackgroundColor3 = Value and ToggleConfig.Color or Color3.fromRGB(40,40,40)
+			}):Play()
 
-            --// NEW FEATURE: Group Script (Collapsible Section)
-            function ElementFunction:AddGroup(GroupConfig)
-                GroupConfig = GroupConfig or {}
-                GroupConfig.Name = GroupConfig.Name or "Group"
-                
-                local Toggled = false
-                local GroupSize = 0 -- Dynamically updated
+			TweenService:Create(ToggleBox.Knob, TweenInfo.new(0.25), {
+				Position = Value and UDim2.new(1,-16,0.5,0) or UDim2.new(0,2,0.5,0)
+			}):Play()
+		end
 
-                local GroupContainer = SetChildren(SetProps(MakeElement("TFrame"), {
-                    Size = UDim2.new(1, 0, 0, 0),
-                    ClipsDescendants = true
-                }), { MakeElement("List") })
+		ToggleConfig.Callback(Value)
+	end
 
-                local Click = SetProps(MakeElement("Button"), { Size = UDim2.new(1, 0, 1, 0) })
-                local Chevron = SetProps(MakeElement("Image", "rbxassetid://7072706796"), { Size = UDim2.new(0, 20, 0, 20), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(1, -30, 0.5, 0), ImageColor3 = Color3.fromRGB(240, 240, 240), Rotation = 0 })
+	AddConnection(Click.MouseButton1Click,function()
+		Toggle:Set(not Toggle.Value)
+		SaveCfg(game.GameId)
+	end)
 
-                local GroupFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
-                    Size = UDim2.new(1, 0, 0, 36), -- Header Size
-                    Parent = ItemParent,
-                    ClipsDescendants = true
-                }), {
-                    AddThemeObject(SetProps(MakeElement("Label", GroupConfig.Name, 15), { Size = UDim2.new(1, -12, 0, 36), Position = UDim2.new(0, 12, 0, 0), Font = Enum.Font.GothamBold, Name = "Title" }), "Text"),
-                    AddThemeObject(Chevron, "TextDark"),
-                    AddThemeObject(MakeElement("Stroke"), "Stroke"),
-                    Click,
-                    -- Container for inner elements (starts hidden)
-                    SetProps(GroupContainer, { Position = UDim2.new(0, 0, 0, 36), Size = UDim2.new(1, 0, 0, 0) })
-                }), "Second")
+	Toggle:Set(Toggle.Value)
+	if ToggleConfig.Flag then NalLib.Flags[ToggleConfig.Flag] = Toggle end
+	return Toggle
+end
 
-                -- Update container size when items added
-                AddConnection(GroupContainer.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
-                    GroupSize = GroupContainer.UIListLayout.AbsoluteContentSize.Y
-                    if Toggled then
-                        GroupFrame.Size = UDim2.new(1, 0, 0, 36 + GroupSize + 10)
-                    end
-                end)
+           function ElementFunction:AddGroup(GroupConfig)
+	GroupConfig = GroupConfig or {}
+	GroupConfig.Name = GroupConfig.Name or "Group"
 
-                AddConnection(Click.MouseButton1Click, function()
-                    Toggled = not Toggled
-                    TweenService:Create(Chevron, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Rotation = Toggled and 180 or 0}):Play()
-                    TweenService:Create(GroupFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Size = Toggled and UDim2.new(1, 0, 0, 36 + GroupSize + 10) or UDim2.new(1, 0, 0, 36)}):Play()
-                end)
+	local Open = false
+	local ContentSize = 0
 
-                -- Return new ElementFunction for the inner container
-                local GroupFunctions = GetElements(GroupContainer)
-                return GroupFunctions
-            end
+	local Click = SetProps(MakeElement("Button"), {Size = UDim2.new(1,0,1,0)})
+	local Chevron = SetProps(MakeElement("Image", "rbxassetid://7072706796"), {
+		Size = UDim2.new(0,18,0,18),
+		Position = UDim2.new(1,-30,0.5,0),
+		AnchorPoint = Vector2.new(0.5,0.5),
+		Rotation = 0
+	})
+
+	local GroupFrame = AddThemeObject(SetChildren(SetProps(
+		MakeElement("RoundFrame", Color3.fromRGB(255,255,255), 0, 5),
+		{
+			Parent = ItemParent,
+			Size = UDim2.new(1,0,0,36),
+			ClipsDescendants = true
+		}
+	), {
+		AddThemeObject(SetProps(MakeElement("Label", GroupConfig.Name, 15), {
+			Size = UDim2.new(1,-40,1,0),
+			Position = UDim2.new(0,12,0,0),
+			Font = Enum.Font.GothamBold
+		}), "Text"),
+		AddThemeObject(Chevron, "TextDark"),
+		AddThemeObject(MakeElement("Stroke"), "Stroke"),
+		Click
+	}), "Second")
+
+	local GroupContainer = SetChildren(SetProps(MakeElement("TFrame"), {
+		Parent = GroupFrame,
+		Position = UDim2.new(0,0,0,36),
+		Size = UDim2.new(1,0,0,0),
+		AutomaticSize = Enum.AutomaticSize.Y
+	}), {
+		MakeElement("List", 0, 6),
+		MakeElement("Padding", 6, 10, 10, 6)
+	})
+
+	AddConnection(GroupContainer.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+		ContentSize = GroupContainer.UIListLayout.AbsoluteContentSize.Y
+		if Open then
+			GroupFrame.Size = UDim2.new(1,0,0,36 + ContentSize + 6)
+		end
+	end)
+
+	AddConnection(Click.MouseButton1Click, function()
+		Open = not Open
+		TweenService:Create(Chevron, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {
+			Rotation = Open and 180 or 0
+		}):Play()
+
+		TweenService:Create(GroupFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {
+			Size = Open and UDim2.new(1,0,0,36 + ContentSize + 6) or UDim2.new(1,0,0,36)
+		}):Play()
+	end)
+
+	return GetElements(GroupContainer)
+end
 
 			function ElementFunction:AddSlider(SliderConfig)
 				SliderConfig = SliderConfig or {}
@@ -734,33 +787,62 @@ function NalLib:MakeWindow(WindowConfig)
 
 		local ElementFunction = {}
 
-		function ElementFunction:AddSection(SectionConfig)
-			SectionConfig.Name = SectionConfig.Name or "Section"
-			local SectionFrame = SetChildren(SetProps(MakeElement("TFrame"), { Size = UDim2.new(1, 0, 0, 26), Parent = Container }), {
-				AddThemeObject(SetProps(MakeElement("Label", SectionConfig.Name, 14), { Size = UDim2.new(1, -12, 0, 16), Position = UDim2.new(0, 0, 0, 3), Font = Enum.Font.GothamSemibold }), "TextDark"),
-				SetChildren(SetProps(MakeElement("TFrame"), { AnchorPoint = Vector2.new(0, 0), Size = UDim2.new(1, 0, 1, -24), Position = UDim2.new(0, 0, 0, 23), Name = "Holder" }), { MakeElement("List", 0, 6) }),
-			})
-			AddConnection(SectionFrame.Holder.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
-				SectionFrame.Size = UDim2.new(1, 0, 0, SectionFrame.Holder.UIListLayout.AbsoluteContentSize.Y + 31)
-				SectionFrame.Holder.Size = UDim2.new(1, 0, 0, SectionFrame.Holder.UIListLayout.AbsoluteContentSize.Y)
-			end)
-			local SectionFunction = {}
-			for i, v in next, GetElements(SectionFrame.Holder) do SectionFunction[i] = v end
-			return SectionFunction
-		end	
+		function Tab:AddSection(SectionConfig)
+    SectionConfig = SectionConfig or {}
+    SectionConfig.Name = SectionConfig.Name or "Section"
+    SectionConfig.Icon = SectionConfig.Icon
+    SectionConfig.IconSide = SectionConfig.IconSide or "Left"
 
-		for i, v in next, GetElements(Container) do ElementFunction[i] = v end
-		return ElementFunction   
-	end  
-	
-	NalLib:MakeNotification({
-		Name = "Nal Library",
-		Content = "Library loaded successfully!",
-		Time = 5
-	})
-	
-	return TabFunction
-end   
+    local SectionFrame = SetChildren(SetProps(MakeElement("Frame", Color3.fromRGB(0,0,0)), {
+        Parent = ItemParent,
+        Size = UDim2.new(1, -10, 0, 32),
+        BackgroundTransparency = 1
+    }), {
+        MakeElement("List", 0, 6),
+        MakeElement("Padding", 0, 6, 0, 6)
+    })
+
+    local Content = SetChildren(SetProps(MakeElement("Frame"), {
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 1
+    }), {
+        MakeElement("List", 0, 6)
+    })
+
+    Content.Parent = SectionFrame
+
+    local IconImage
+    if SectionConfig.Icon then
+        IconImage = SetProps(MakeElement("Image", SectionConfig.Icon), {
+            Size = UDim2.new(0, 18, 0, 18),
+            BackgroundTransparency = 1
+        })
+    end
+
+    local Title = SetProps(MakeElement("Text", SectionConfig.Name), {
+        TextSize = 14,
+        Font = Enum.Font.GothamBold,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, -24, 1, 0),
+        TextColor3 = Color3.fromRGB(200,200,200)
+    })
+
+    if SectionConfig.Icon then
+        if SectionConfig.IconSide == "Right" then
+            Title.Parent = Content
+            IconImage.Parent = Content
+        else
+            IconImage.Parent = Content
+            Title.Parent = Content
+        end
+    else
+        Title.Parent = Content
+    end
+
+    SectionFrame.Size = UDim2.new(1, -10, 0, 28)
+    return SectionFrame
+end
 
 function NalLib:Destroy()
 	Nal:Destroy()
